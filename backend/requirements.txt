@@ -1,0 +1,8 @@
+Flask==3.0.0
+python-dotenv==1.0.0
+psycopg[binary]==3.2.0
+SQLAlchemy==2.0.25
+Flask-JWT-Extended==4.4.4
+langchain==0.0.302
+openai==1.0.0
+pytest==8.4.0
