@@ -10,13 +10,12 @@ from datetime import datetime, timedelta
 
 
 load_dotenv()
-JWI_KEY = os.getenv("JWI_KEY")
 
 def register_user(email, password):
     db = next(get_db())
     existing_user = db.query(User).filter(User.email == email).first()
     if existing_user:
-        return {"error": "email already registered"}, 400
+        return jsonify({"error": "email already registered"}), 400
     
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
 
@@ -24,13 +23,13 @@ def register_user(email, password):
 
     db.add(new_user)
     db.commit()
-    return {"message": "User created successfully"}, 201
+    return jsonify({"message": "User created successfully"}), 201
     
 def login_user(email, password):
     db = next(get_db())
     existing_user = db.query(User).filter(User.email == email).first()
     if not existing_user:
-        return {"error": "invalid credentials"}, 401
+        return jsonify({"error": "invalid credentials"}), 401
     
     #pull password and chekc against given passsword
     correct_password = bcrypt.checkpw(
@@ -39,7 +38,7 @@ def login_user(email, password):
     )
 
     if not correct_password:
-        return {"error": "invalid credentials"}, 401
+        return jsonify({"error": "invalid credentials"}), 401
     
     payload = {
     'user_id': existing_user.id,
@@ -48,7 +47,7 @@ def login_user(email, password):
 
     # 2. Define secret and algorithm
     secret_key = os.getenv("JWT_SECRET")
-    algorithm = 'HS256'
+    algorithm = ["HS256"]
 
     # 3. Generate token
     token = jwt.encode(payload, secret_key, algorithm=algorithm)
@@ -59,7 +58,7 @@ def verify_token(token):
         decoded_token = jwt.decode(
             token, 
             os.getenv("JWT_SECRET"),
-            algorithms='HS256'
+            algorithm = ["HS256"]
         )
         return decoded_token["user_id"]
     except jwt.ExpiredSignatureError:

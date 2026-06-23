@@ -21,3 +21,4 @@ data/uploads/
 
 # VS Code
 .vscode/
+chroma_store/

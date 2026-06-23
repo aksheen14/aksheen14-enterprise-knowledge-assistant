@@ -2,9 +2,10 @@ from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
-from langchain_openai import ChatOpenAI
-from langchain.chains import RetrievalQA
-from langchain_openai import OpenAIEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 import os
 
 load_dotenv()
@@ -46,23 +47,29 @@ def get_vector_store(document_id):
         persist_directory=CHROMA_PATH  # Where to save data locally, remove if not necessary
     )
     return vector_store
+
 def answer_question(question, document_id):
     vector_store = get_vector_store(document_id)
     retriever = vector_store.as_retriever(search_kwargs={"k": 4})
-    llm = ChatOpenAI(
-        model="gpt-3.5-turbo",
-        temperature=0
-    )
-    qa = RetrievalQA.from_chain_type(
-        llm=llm, 
-        chain_type="stuff", 
-        retriever=retriever, 
-        return_source_documents=True
-    )
-    result = qa.invoke({"query": question})
-    answer = result["result"]
-    sources = result["source_documents"]
-    
-    return answer, sources
 
+    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Answer the question based on the context below.\n\nContext: {context}"),
+        ("human", "{input}"),
+    ])
+
+    # LCEL chain — pipes data through each step
+    chain = (
+        {"context": retriever, "input": RunnablePassthrough()}
+        | prompt
+        | llm
+        | StrOutputParser()
+    )
+
+    answer = chain.invoke(question)
+
+    # get source documents separately
+    source_chunks = retriever.invoke(question)
+
+    return answer, source_chunks

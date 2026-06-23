@@ -49,7 +49,7 @@ def upload_documents():
     token = request.headers.get("Authorization")
     user_id = verify_token(token)
     if not user_id:
-        return {"error": "invalid credentials"}, 401
+        return jsonify({"error": "invalid credentials"}), 401
     
     #get file
     file = request.files.get("file")
@@ -69,11 +69,12 @@ def upload_documents():
     new_document = Document(filename=filename, filepath=filepath ,user_id=user_id)
     db.add(new_document)
     db.commit()
+    db.refresh(new_document)
     document_id = new_document.id
 
     #embed it
     embed_and_store(chunks, document_id)
-    return {"message": "Document uploaded successfully"}, 201
+    return jsonify({"message": "Document uploaded successfully"}), 201
 
 @app.route("/documents/ask", methods=["POST"]) 
 def ask_question():
@@ -81,7 +82,8 @@ def ask_question():
     token = request.headers.get("Authorization")
     user_id = verify_token(token)
     if not user_id:
-        return {"error": "invalid credentials"}, 401
+        return jsonify({"error": "invalid credentials"}), 401
+
 
     #get question and doc id
     data = request.json
@@ -126,7 +128,8 @@ def history():
     token = request.headers.get("Authorization")
     user_id = verify_token(token)
     if not user_id:
-        return {"error": "invalid credentials"}, 401
+        return jsonify({"error": "invalid credentials"}), 401
+
 
     db = next(get_db())
     chat_history = db.query(ChatHistory).filter(ChatHistory.user_id == user_id).all()
