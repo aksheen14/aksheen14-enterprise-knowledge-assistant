@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
 
@@ -26,7 +26,7 @@ class Document(Base):
 
 class ChatHistory(Base):
     __tablename__ = "chat_history"
-    
+
     id = Column(Integer, primary_key= True)
     question = Column(Text, nullable=False)
     answer = Column(Text, nullable=False)
