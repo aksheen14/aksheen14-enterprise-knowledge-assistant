@@ -41,13 +41,13 @@ def login_user(email, password):
         return jsonify({"error": "invalid credentials"}), 401
     
     payload = {
-    'user_id': existing_user.id,
+        "user_id": existing_user.id,
         "exp": datetime.utcnow() + timedelta(hours=1)
     }
 
     # 2. Define secret and algorithm
     secret_key = os.getenv("JWT_SECRET")
-    algorithm = ["HS256"]
+    algorithm = "HS256"
 
     # 3. Generate token
     token = jwt.encode(payload, secret_key, algorithm=algorithm)
@@ -55,10 +55,13 @@ def login_user(email, password):
 
 def verify_token(token):
     try:
+        if token and token.startswith("Bearer "):
+            token = token[7:]
+
         decoded_token = jwt.decode(
-            token, 
+            token,
             os.getenv("JWT_SECRET"),
-            algorithm = ["HS256"]
+            algorithms=["HS256"]
         )
         return decoded_token["user_id"]
     except jwt.ExpiredSignatureError:
