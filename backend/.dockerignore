@@ -1,3 +1,11 @@
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
 # Python
 __pycache__/
 *.pyc
@@ -7,6 +15,9 @@ __pycache__/
 .env.*
 !.env.example
 playground.py
+venv/
+.venv/
+env/
 
 # Node
 node_modules/
@@ -20,6 +31,6 @@ data/uploads/
 # OS files
 .DS_Store
 
-# VS Code
+# IDEs and Tools
 .vscode/
 chroma_store/
