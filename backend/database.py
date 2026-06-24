@@ -2,6 +2,7 @@ import os
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 from sqlalchemy.orm import sessionmaker, declarative_base
+from contextlib import contextmanager
 
 
 load_dotenv()
@@ -19,9 +20,14 @@ def init_db():
     from models import Base as models_Base
     models_Base.metadata.create_all(bind=engine)
 
-def get_db():
+@contextmanager
+def get_db_context():
     db = SessionLocal()
     try:
         yield db
+        db.commit()
+    except:
+        db.rollback()
+        raise
     finally:
         db.close()

@@ -1,5 +1,7 @@
 import json
 from datetime import datetime
+from flask import jsonify
+
 from unittest.mock import MagicMock
 
 import pytest
@@ -16,15 +18,15 @@ def test_register_route_requires_email_and_password(client):
     response = client.post("/auth/register", json={})
 
     assert response.status_code == 400
-    assert response.json == {"error": "email and password required"}
+    assert response.json == {"error": "invalid request body"}
 
 
 def test_login_route_delegates_to_login_user(monkeypatch, client):
-    fake_response = MagicMock()
-    fake_response.json = {"token": "fake-token"}
-    fake_response.status_code = 200
-
-    monkeypatch.setattr(main, "login_user", lambda email, password: (fake_response, 200))
+    monkeypatch.setattr(
+        main,
+        "login_user",
+        lambda email, password: (jsonify({"token": "fake-token"}), 200),
+    )
 
     response = client.post(
         "/auth/login",
@@ -60,11 +62,18 @@ def test_history_route_returns_user_chat_history(monkeypatch, client):
             )
             return DummyQuery([fake_chat])
 
-    def fake_get_db():
-        yield DummyDB()
+    def fake_get_db_context():
+        class DummyContext:
+            def __enter__(self):
+                return DummyDB()
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+        return DummyContext()
 
     monkeypatch.setattr(main, "verify_token", fake_verify_token)
-    monkeypatch.setattr(main, "get_db", fake_get_db)
+    monkeypatch.setattr(main, "get_db_context", fake_get_db_context)
 
     response = client.get(
         "/documents/history",

@@ -6,17 +6,21 @@ export default function Dashboard() {
     const [file, setFile] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [loadingDocuments, setLoadingDocuments] = useState(true);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDocuments = async () => {
+            setLoadingDocuments(true);
             try {
                 const res = await getDocuments();
                 setDocuments(res.data);
             } catch (err) {
                 console.error("Failed to fetch documents", err);
+            } finally {
+                setLoadingDocuments(false);
             }
         };
         fetchDocuments();
@@ -106,7 +110,14 @@ export default function Dashboard() {
                         Your documents
                     </h2>
 
-                    {documents.length === 0 ? (
+                        {loadingDocuments ? (
+                        <div className="text-center text-gray-500 text-sm py-12 bg-white rounded-2xl border border-gray-200">
+                            <div className="inline-flex items-center gap-3">
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-blue-600 border-t-transparent"></div>
+                                Loading documents...
+                            </div>
+                        </div>
+                    ) : documents.length === 0 ? (
                         <div className="text-center text-gray-400 text-sm py-12 bg-white rounded-2xl border border-gray-200">
                             No documents uploaded yet. Upload a PDF to get started.
                         </div>

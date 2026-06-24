@@ -2,6 +2,7 @@ import os
 import bcrypt
 import jwt
 import pytest
+from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -92,8 +93,8 @@ def test_login_user_rejects_invalid_password(db_session):
 def test_verify_token_accepts_bearer_token():
     payload = {
         "user_id": 42,
-        "exp": jwt.datetime.datetime.utcnow() + jwt.datetime.timedelta(hours=1)
+        "exp": datetime.utcnow() + timedelta(hours=1)
     }
     token = jwt.encode(payload, os.environ["JWT_SECRET"], algorithm="HS256")
 
-    assert verify_token(f"Bearer {token}") == 42
+    assert verify_token("Bearer {}".format(token)) == 42
