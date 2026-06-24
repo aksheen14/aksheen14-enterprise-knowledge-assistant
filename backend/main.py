@@ -232,6 +232,36 @@ def get_documents():
         for doc in documents
     ]), 200
 
+@app.route("/documents/<int:document_id>", methods=["DELETE"])
+def delete_document(document_id):
+    token = request.headers.get("Authorization")
+    user_id = verify_token(token)
+    if not user_id:
+        return jsonify({"error": "invalid token"}), 401
+
+    try:
+        with get_db_context() as db:
+            document = db.query(Document).filter(
+                Document.id == document_id,
+                Document.user_id == user_id
+            ).first()
+
+            if not document:
+                return jsonify({"error": "document not found"}), 404
+
+            db.query(ChatHistory).filter(ChatHistory.document_id == document_id).delete()
+            db.delete(document)
+
+        if document.filepath and os.path.isfile(document.filepath):
+            try:
+                os.remove(document.filepath)
+            except Exception as e:
+                print(f"Failed to remove document file: {e}")
+
+        return jsonify({"message": "Document deleted"}), 200
+    except Exception as e:
+        return jsonify({"error": f"failed to delete document: {str(e)}"}), 500
+
 if __name__ == "__main__":
     app.run(debug=True)
     

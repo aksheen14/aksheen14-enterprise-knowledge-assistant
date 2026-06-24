@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { uploadDocument, getDocuments } from "../api/client";
+import { uploadDocument, getDocuments, deleteDocument } from "../api/client";
 
 export default function Dashboard() {
     const [file, setFile] = useState(null);
     const [documents, setDocuments] = useState([]);
     const [uploading, setUploading] = useState(false);
     const [loadingDocuments, setLoadingDocuments] = useState(true);
+    const [deletingDocumentId, setDeletingDocumentId] = useState(null);
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const navigate = useNavigate();
@@ -44,6 +45,22 @@ export default function Dashboard() {
             setError(err.response?.data?.error || "Upload failed");
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handleDeleteDocument = async (id) => {
+        setDeletingDocumentId(id);
+        setError("");
+        setSuccess("");
+
+        try {
+            await deleteDocument(id);
+            setDocuments((prevDocuments) => prevDocuments.filter((doc) => doc.id !== id));
+            setSuccess("Document deleted successfully.");
+        } catch (err) {
+            setError(err.response?.data?.error || "Delete failed");
+        } finally {
+            setDeletingDocumentId(null);
         }
     };
 
@@ -132,12 +149,21 @@ export default function Dashboard() {
                                         <p className="text-sm font-medium text-gray-800">{doc.filename}</p>
                                         <p className="text-xs text-gray-400">ID: {doc.id}</p>
                                     </div>
-                                    <button
-                                        onClick={() => navigate(`/chat/${doc.id}`)}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
-                                    >
-                                        Chat
-                                    </button>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => navigate(`/chat/${doc.id}`)}
+                                            className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition"
+                                        >
+                                            Chat
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteDocument(doc.id)}
+                                            disabled={deletingDocumentId === doc.id}
+                                            className="bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition disabled:opacity-50"
+                                        >
+                                            {deletingDocumentId === doc.id ? "Deleting..." : "Delete"}
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>

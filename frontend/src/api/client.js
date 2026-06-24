@@ -33,3 +33,6 @@ export const getHistory = () =>
 
 export const getDocuments = () =>
     API.get("/documents");
+
+export const deleteDocument = (documentId) =>
+    API.delete(`/documents/${documentId}`);

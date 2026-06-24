@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { askQuestion } from "../api/client";
 
@@ -9,6 +9,19 @@ export default function Chat() {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    // 1. Create a reference to the bottom of the chat
+    const messagesEndRef = useRef(null);
+
+    // 2. Scroll function
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    // 3. Trigger scroll whenever messages change OR when loading starts/stops
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, loading]);
 
     const handleAsk = async () => {
         if (!question.trim()) return;
@@ -43,7 +56,8 @@ export default function Chat() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        // Changed min-h-screen to h-screen so the input stays pinned to the bottom
+        <div className="h-screen bg-gray-50 flex flex-col">
 
             {/* navbar */}
             <div className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
@@ -57,7 +71,8 @@ export default function Chat() {
             </div>
 
             {/* messages */}
-            <div className="flex-1 max-w-3xl w-full mx-auto px-6 py-8 space-y-6">
+            {/* Added overflow-y-auto to allow internal scrolling */}
+            <div className="flex-1 max-w-3xl w-full mx-auto px-6 py-8 space-y-6 overflow-y-auto">
                 {messages.length === 0 && (
                     <div className="text-center text-gray-400 text-sm mt-20">
                         Ask a question about your document
@@ -101,6 +116,9 @@ export default function Chat() {
                         {error}
                     </div>
                 )}
+                
+                {/* 4. This empty div acts as the target for scrollIntoView */}
+                <div ref={messagesEndRef} />
             </div>
 
             {/* input */}
