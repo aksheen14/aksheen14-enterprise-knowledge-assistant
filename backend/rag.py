@@ -32,7 +32,7 @@ def load_and_chunk(file_path):
 def embed_and_store(chunks, document_id):
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     vector_store = Chroma(
-        collection_name=str(document_id),
+        collection_name=f"doc_{document_id}",
         embedding_function=embeddings,
         persist_directory=CHROMA_PATH  # Where to save data locally, remove if not necessary
     )
@@ -42,7 +42,7 @@ def embed_and_store(chunks, document_id):
 def get_vector_store(document_id):
     embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
     vector_store = Chroma(
-        collection_name=str(document_id),
+        collection_name=f"doc_{document_id}",
         embedding_function=embeddings,
         persist_directory=CHROMA_PATH  # Where to save data locally, remove if not necessary
     )

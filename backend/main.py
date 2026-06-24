@@ -6,10 +6,11 @@ from auth import register_user, login_user, verify_token
 from rag import load_and_chunk, embed_and_store, answer_question
 import os
 import json
+from flask_cors import CORS
 
 # create the flask app
 app = Flask(__name__)
-
+CORS(app)
 # folder where uploaded files will be saved
 UPLOAD_FOLDER = "data/uploads/"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -74,7 +75,10 @@ def upload_documents():
 
     #embed it
     embed_and_store(chunks, document_id)
-    return jsonify({"message": "Document uploaded successfully"}), 201
+    return jsonify({
+        "message": "Document uploaded successfully",
+        "document_id": document_id
+    }), 201
 
 @app.route("/documents/ask", methods=["POST"]) 
 def ask_question():
@@ -145,6 +149,24 @@ def history():
         for chat in chat_history
     ]), 200
 
+@app.route("/documents", methods=["GET"])
+def get_documents():
+    token = request.headers.get("Authorization")
+    user_id = verify_token(token)
+    if not user_id:
+        return jsonify({"error": "invalid token"}), 401
+
+    db = next(get_db())
+    documents = db.query(Document).filter(Document.user_id == user_id).all()
+
+    return jsonify([
+        {
+            "id": doc.id,
+            "filename": doc.filename,
+            "uploaded_at": doc.uploaded_at.isoformat()
+        }
+        for doc in documents
+    ]), 200
 
 if __name__ == "__main__":
     app.run(debug=True)
