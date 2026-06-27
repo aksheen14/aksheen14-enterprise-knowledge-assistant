@@ -1,21 +1,59 @@
+@import "tailwindcss";
+
+
+/* Tailwind theme mapping using in-CSS `@theme` (Tailwind v4.3.1) */
+@theme {
+  --color-primary-50: #eaf2ff;
+  --color-primary-150: #b8d4ff;
+  --color-primary-300: #6fa8ff;
+  --color-primary-500: #2563EB;
+  --color-primary-700: #153e9b;
+  --color-gray-900: #111827;
+  --color-gray-700: #374151;
+  --color-gray-500: #6b7280;
+  --color-gray-300: #d1d5db;
+  --color-gray-50: #f9fafb;
+  --color-success: #16A34A;
+  --color-error: #EF4444;
+  --color-warning: #F59E0B;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-family-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
+  /* Primary (5 stops around #2563EB) */
+  --color-primary-50: #eaf2ff;
+  --color-primary-150: #b8d4ff;
+  --color-primary-300: #6fa8ff;
+  --color-primary-500: #2563EB;
+  --color-primary-700: #153e9b;
+
+  /* Neutral grays */
+  --gray-900: #111827;
+  --gray-700: #374151;
+  --gray-500: #6b7280;
+  --gray-300: #d1d5db;
+  --gray-50:  #f9fafb;
+
+  /* Semantic */
+  --color-success: #16A34A;
+  --color-error:   #EF4444;
+  --color-warning: #F59E0B;
+
+  /* Existing tokens (kept for compatibility) */
+  --text: var(--gray-700);
+  --text-h: var(--gray-900);
+  --bg: var(--gray-50);
   --border: #e5e4e7;
   --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', var(--font-sans);
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
+  font: 18px/145% var(--font-sans);
   letter-spacing: 0.18px;
   color-scheme: light dark;
   color: var(--text);
@@ -30,6 +68,18 @@
   }
 }
 
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md font-medium;
+    padding: 0.5rem 1rem;
+  }
+
+  .btn-primary {
+    background-color: var(--color-primary-500);
+    color: white;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;
@@ -37,12 +87,13 @@
     --bg: #16171d;
     --border: #2e303a;
     --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    /* reduce contrast for dark mode primary */
+    --color-primary-50: #0f1a38;
+    --color-primary-150: #17305f;
+    --color-primary-300: #1e4994;
+    --color-primary-500: #2563EB;
+    --color-primary-700: #5b8bff;
   }
 
   #social .button-icon {
@@ -68,7 +119,7 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
+  font-family: var(--font-heading);
   font-weight: 500;
   color: var(--text-h);
 }

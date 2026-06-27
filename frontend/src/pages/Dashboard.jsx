@@ -63,12 +63,7 @@ export default function Dashboard() {
             setDeletingDocumentId(null);
         }
     };
-
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        navigate("/login");
-    };
-
+    
     return (
         <div className="min-h-screen bg-gray-50">
 
@@ -77,12 +72,6 @@ export default function Dashboard() {
                 <h1 className="text-lg font-semibold text-gray-800">
                     Enterprise Knowledge Assistant
                 </h1>
-                <button
-                    onClick={handleLogout}
-                    className="text-sm text-gray-500 hover:text-gray-800"
-                >
-                    Logout
-                </button>
             </div>
 
             <div className="max-w-3xl mx-auto px-6 py-10">

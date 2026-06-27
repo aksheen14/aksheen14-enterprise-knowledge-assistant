@@ -21,9 +21,11 @@ export default function Login() {
                 // after registering, log them in automatically
                 const res = await login(email, password);
                 localStorage.setItem("token", res.data.token);
+                localStorage.setItem("email", email);
             } else {
                 const res = await login(email, password);
                 localStorage.setItem("token", res.data.token);
+                localStorage.setItem("email", email);
             }
             navigate("/dashboard");
         } catch (err) {

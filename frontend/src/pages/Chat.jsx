@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { askQuestion } from "../api/client";
+import { getHistory } from '../api/client';
+
 
 export default function Chat() {
     const { documentId } = useParams();
@@ -22,6 +24,34 @@ export default function Chat() {
     useEffect(() => {
         scrollToBottom();
     }, [messages, loading]);
+
+    useEffect(() => {
+        const loadHistory = async () => {
+            try {
+                // Call YOUR helper function instead of the raw client
+                const response = await getHistory();
+                // Make sure we use == to ignore String vs Int type issues for now
+                const currentDocHistory = response.data.filter(
+                    (chat) => chat.document_id == documentId 
+                );
+
+                const formattedMessages = [];
+                currentDocHistory.forEach((chat) => {
+                    formattedMessages.push({ role: "user", text: chat.question });
+                    formattedMessages.push({ role: "ai", text: chat.answer, sources: chat.source });
+                });
+
+                setMessages(formattedMessages); 
+
+            } catch (error) {
+                console.error("Failed to fetch chat history:", error);
+            }
+        };
+
+        if (documentId) {
+            loadHistory();
+        }
+    }, [documentId]);
 
     const handleAsk = async () => {
         if (!question.trim()) return;
@@ -72,16 +102,16 @@ export default function Chat() {
 
             {/* messages */}
             {/* Added overflow-y-auto to allow internal scrolling */}
-            <div className="flex-1 max-w-3xl w-full mx-auto px-6 py-8 space-y-6 overflow-y-auto">
+            <div className="flex-1 w-full px-6 py-8 space-y-6 overflow-y-auto">
                 {messages.length === 0 && (
-                    <div className="text-center text-gray-400 text-sm mt-20">
+                    <div className="text-left text-gray-400 text-sm mt-20">
                         Ask a question about your document
                     </div>
                 )}
 
                 {messages.map((msg, i) => (
                     <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-                        <div className={`max-w-xl rounded-2xl px-5 py-3 text-sm ${
+                        <div className={`max-w-xl rounded-2xl px-5 py-3 text-sm text-left ${
                             msg.role === "user"
                                 ? "bg-blue-600 text-white"
                                 : "bg-white border border-gray-200 text-gray-800"
@@ -105,14 +135,14 @@ export default function Chat() {
 
                 {loading && (
                     <div className="flex justify-start">
-                        <div className="bg-white border border-gray-200 rounded-2xl px-5 py-3 text-sm text-gray-400">
+                        <div className="bg-white border border-gray-200 rounded-2xl px-5 py-3 text-sm text-left text-gray-400">
                             Thinking...
                         </div>
                     </div>
                 )}
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">
+                    <div className="bg-red-50 text-red-600 text-sm text-left px-4 py-3 rounded-lg">
                         {error}
                     </div>
                 )}

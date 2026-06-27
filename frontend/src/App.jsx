@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Chat from "./pages/Chat";
+import Navbar from "./components/Navbar";
 
 function PrivateRoute({ children }) {
     const token = localStorage.getItem("token");
@@ -11,6 +12,7 @@ function PrivateRoute({ children }) {
 export default function App() {
     return (
         <BrowserRouter>
+            <Navbar />
             <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/dashboard" element={
