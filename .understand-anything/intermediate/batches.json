@@ -1,0 +1,406 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "louvain",
+  "totalFiles": 29,
+  "totalBatches": 4,
+  "exportsByPath": {
+    "backend/auth.py": [
+      "register_user",
+      "login_user",
+      "verify_token"
+    ],
+    "backend/create_tables.py": [],
+    "backend/database.py": [
+      "init_db",
+      "get_db_context"
+    ],
+    "backend/main.py": [
+      "register",
+      "login",
+      "upload_documents",
+      "ask_question",
+      "history",
+      "get_documents",
+      "delete_document"
+    ],
+    "backend/models.py": [
+      "User",
+      "Document",
+      "ChatHistory"
+    ],
+    "backend/rag.py": [
+      "load_and_chunk",
+      "embed_and_store",
+      "get_vector_store",
+      "answer_question"
+    ],
+    "frontend/eslint.config.js": [],
+    "frontend/src/api/client.js": [
+      "register",
+      "login",
+      "uploadDocument",
+      "askQuestion",
+      "getHistory",
+      "getDocuments",
+      "deleteDocument"
+    ],
+    "frontend/src/App.jsx": [
+      "App"
+    ],
+    "frontend/src/components/Navbar.jsx": [
+      "Navbar"
+    ],
+    "frontend/src/main.jsx": [],
+    "frontend/src/pages/Chat.jsx": [
+      "Chat"
+    ],
+    "frontend/src/pages/Dashboard.jsx": [
+      "Dashboard"
+    ],
+    "frontend/src/pages/Login.jsx": [
+      "Login"
+    ],
+    "frontend/vite.config.js": [],
+    "tests/conftest.py": [],
+    "tests/test_auth.py": [
+      "db_engine",
+      "db_session",
+      "test_register_user_creates_user",
+      "test_register_user_rejects_duplicate_email",
+      "test_login_user_returns_token",
+      "test_login_user_rejects_invalid_password",
+      "test_verify_token_accepts_bearer_token"
+    ],
+    "tests/test_main.py": [
+      "client",
+      "test_register_route_requires_email_and_password",
+      "test_login_route_delegates_to_login_user",
+      "test_history_route_returns_user_chat_history"
+    ],
+    "tests/test_rag.py": [
+      "test_load_and_chunk_returns_chunks",
+      "test_embed_and_store_persists_chunks",
+      "test_get_vector_store_uses_correct_collection_name",
+      "SimpleChain",
+      "test_answer_question_returns_answer_and_sources",
+      "test_answer_question_uses_retriever_search_kwargs"
+    ]
+  },
+  "batches": [
+    {
+      "batchIndex": 1,
+      "files": [
+        {
+          "path": "backend/auth.py",
+          "language": "python",
+          "sizeLines": 81,
+          "fileCategory": "code"
+        },
+        {
+          "path": "backend/create_tables.py",
+          "language": "python",
+          "sizeLines": 3,
+          "fileCategory": "code"
+        },
+        {
+          "path": "backend/database.py",
+          "language": "python",
+          "sizeLines": 32,
+          "fileCategory": "code"
+        },
+        {
+          "path": "backend/main.py",
+          "language": "python",
+          "sizeLines": 267,
+          "fileCategory": "code"
+        },
+        {
+          "path": "backend/models.py",
+          "language": "python",
+          "sizeLines": 39,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_auth.py",
+          "language": "python",
+          "sizeLines": 100,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_main.py",
+          "language": "python",
+          "sizeLines": 92,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "backend/auth.py": [
+          "backend/database.py",
+          "backend/models.py"
+        ],
+        "backend/create_tables.py": [
+          "backend/database.py"
+        ],
+        "backend/database.py": [
+          "backend/models.py"
+        ],
+        "backend/main.py": [
+          "backend/database.py",
+          "backend/models.py",
+          "backend/auth.py",
+          "backend/rag.py"
+        ],
+        "backend/models.py": [
+          "backend/database.py"
+        ],
+        "tests/test_auth.py": [
+          "backend/auth.py",
+          "backend/models.py",
+          "backend/database.py"
+        ],
+        "tests/test_main.py": [
+          "backend/main.py"
+        ]
+      },
+      "neighborMap": {
+        "backend/main.py": [
+          {
+            "path": "backend/rag.py",
+            "batchIndex": 4,
+            "symbols": [
+              "load_and_chunk",
+              "embed_and_store",
+              "get_vector_store",
+              "answer_question"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 2,
+      "files": [
+        {
+          "path": "frontend/src/App.jsx",
+          "language": "javascript",
+          "sizeLines": 27,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/api/client.js",
+          "language": "javascript",
+          "sizeLines": 37,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/components/Navbar.jsx",
+          "language": "javascript",
+          "sizeLines": 41,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/main.jsx",
+          "language": "javascript",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/pages/Chat.jsx",
+          "language": "javascript",
+          "sizeLines": 145,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/pages/Dashboard.jsx",
+          "language": "javascript",
+          "sizeLines": 163,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/src/pages/Login.jsx",
+          "language": "javascript",
+          "sizeLines": 108,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        "frontend/src/App.jsx": [
+          "frontend/src/pages/Login.jsx",
+          "frontend/src/pages/Dashboard.jsx",
+          "frontend/src/pages/Chat.jsx",
+          "frontend/src/components/Navbar.jsx"
+        ],
+        "frontend/src/api/client.js": [],
+        "frontend/src/components/Navbar.jsx": [],
+        "frontend/src/main.jsx": [
+          "frontend/src/index.css",
+          "frontend/src/App.jsx"
+        ],
+        "frontend/src/pages/Chat.jsx": [
+          "frontend/src/api/client.js"
+        ],
+        "frontend/src/pages/Dashboard.jsx": [
+          "frontend/src/api/client.js"
+        ],
+        "frontend/src/pages/Login.jsx": [
+          "frontend/src/api/client.js"
+        ]
+      },
+      "neighborMap": {
+        "frontend/src/main.jsx": [
+          {
+            "path": "frontend/src/index.css",
+            "batchIndex": 4,
+            "symbols": []
+          }
+        ]
+      }
+    },
+    {
+      "batchIndex": 3,
+      "files": [
+        {
+          "path": "backend/.dockerignore",
+          "language": "unknown",
+          "sizeLines": 35,
+          "fileCategory": "infra"
+        },
+        {
+          "path": "backend/Dockerfile",
+          "language": "dockerfile",
+          "sizeLines": 7,
+          "fileCategory": "infra"
+        }
+      ],
+      "batchImportData": {
+        "backend/.dockerignore": [],
+        "backend/Dockerfile": []
+      },
+      "neighborMap": {}
+    },
+    {
+      "batchIndex": 4,
+      "files": [
+        {
+          "path": ".env.example",
+          "language": "config",
+          "sizeLines": 4,
+          "fileCategory": "config"
+        },
+        {
+          "path": "backend/package.json",
+          "language": "json",
+          "sizeLines": 5,
+          "fileCategory": "config"
+        },
+        {
+          "path": "backend/rag.py",
+          "language": "python",
+          "sizeLines": 74,
+          "fileCategory": "code"
+        },
+        {
+          "path": "backend/requirements.txt",
+          "language": "txt",
+          "sizeLines": 13,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "frontend/eslint.config.js",
+          "language": "javascript",
+          "sizeLines": 21,
+          "fileCategory": "code"
+        },
+        {
+          "path": "frontend/index.html",
+          "language": "html",
+          "sizeLines": 13,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "frontend/package.json",
+          "language": "json",
+          "sizeLines": 29,
+          "fileCategory": "config"
+        },
+        {
+          "path": "frontend/src/App.css",
+          "language": "css",
+          "sizeLines": 184,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "frontend/src/index.css",
+          "language": "css",
+          "sizeLines": 111,
+          "fileCategory": "markup"
+        },
+        {
+          "path": "frontend/vite.config.js",
+          "language": "javascript",
+          "sizeLines": 7,
+          "fileCategory": "code"
+        },
+        {
+          "path": "README.md",
+          "language": "markdown",
+          "sizeLines": 98,
+          "fileCategory": "docs"
+        },
+        {
+          "path": "tests/conftest.py",
+          "language": "python",
+          "sizeLines": 10,
+          "fileCategory": "code"
+        },
+        {
+          "path": "tests/test_rag.py",
+          "language": "python",
+          "sizeLines": 117,
+          "fileCategory": "code"
+        }
+      ],
+      "batchImportData": {
+        ".env.example": [],
+        "backend/package.json": [],
+        "backend/rag.py": [],
+        "backend/requirements.txt": [],
+        "frontend/eslint.config.js": [],
+        "frontend/index.html": [],
+        "frontend/package.json": [],
+        "frontend/src/App.css": [],
+        "frontend/src/index.css": [],
+        "frontend/vite.config.js": [],
+        "README.md": [],
+        "tests/conftest.py": [],
+        "tests/test_rag.py": [
+          "backend/rag.py"
+        ]
+      },
+      "neighborMap": {
+        "backend/rag.py": [
+          {
+            "path": "backend/main.py",
+            "batchIndex": 1,
+            "symbols": [
+              "register",
+              "login",
+              "upload_documents",
+              "ask_question",
+              "history",
+              "get_documents",
+              "delete_document"
+            ]
+          }
+        ],
+        "frontend/src/index.css": [
+          {
+            "path": "frontend/src/main.jsx",
+            "batchIndex": 2,
+            "symbols": []
+          }
+        ]
+      }
+    }
+  ]
+}

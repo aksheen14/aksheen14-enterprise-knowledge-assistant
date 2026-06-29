@@ -1,0 +1,413 @@
+{
+  "nodes": [
+    {
+      "id": "config:.env.example",
+      "type": "config",
+      "name": ".env.example",
+      "filePath": ".env.example",
+      "summary": "Template for environment variables defining the database connection, OpenAI API key, JWT secret, and Flask runtime settings required by the backend.",
+      "tags": ["configuration", "environment", "security", "template"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:backend/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "backend/package.json",
+      "summary": "Minimal backend package manifest declaring Node-level dependencies for the Flask-based backend tooling.",
+      "tags": ["configuration", "dependencies", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:backend/rag.py",
+      "type": "file",
+      "name": "rag.py",
+      "filePath": "backend/rag.py",
+      "summary": "Core RAG pipeline built on LangChain, OpenAI embeddings, and ChromaDB: loads and chunks PDFs, embeds and persists vectors, and answers questions by retrieving relevant context and invoking ChatOpenAI.",
+      "tags": ["service", "rag", "langchain", "vector-store", "ai"],
+      "complexity": "moderate",
+      "languageNotes": "Uses LangChain Expression Language (LCEL) to compose a retrieval chain via the pipe operator with RunnablePassthrough and StrOutputParser."
+    },
+    {
+      "id": "function:backend/rag.py:load_and_chunk",
+      "type": "function",
+      "name": "load_and_chunk",
+      "filePath": "backend/rag.py",
+      "lineRange": [23, 30],
+      "summary": "Loads a PDF from disk with PyPDFLoader and splits it into overlapping text chunks using RecursiveCharacterTextSplitter.",
+      "tags": ["utility", "document-loading", "chunking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:backend/rag.py:embed_and_store",
+      "type": "function",
+      "name": "embed_and_store",
+      "filePath": "backend/rag.py",
+      "lineRange": [32, 40],
+      "summary": "Generates OpenAI embeddings for document chunks and persists them in a per-document ChromaDB collection.",
+      "tags": ["service", "embeddings", "vector-store"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:backend/rag.py:get_vector_store",
+      "type": "function",
+      "name": "get_vector_store",
+      "filePath": "backend/rag.py",
+      "lineRange": [42, 49],
+      "summary": "Returns a Chroma vector store bound to the collection for a given document id, configured with OpenAI embeddings.",
+      "tags": ["factory", "vector-store", "embeddings"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:backend/rag.py:answer_question",
+      "type": "function",
+      "name": "answer_question",
+      "filePath": "backend/rag.py",
+      "lineRange": [51, 75],
+      "summary": "Answers a user question by retrieving relevant chunks from the document's vector store and running an LCEL chain with ChatOpenAI, returning the answer along with source documents.",
+      "tags": ["service", "rag", "retrieval", "ai", "llm"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:backend/requirements.txt",
+      "type": "document",
+      "name": "requirements.txt",
+      "filePath": "backend/requirements.txt",
+      "summary": "Python dependency manifest pinning the backend stack including Flask, LangChain, OpenAI, and ChromaDB packages.",
+      "tags": ["documentation", "dependencies", "python", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:frontend/eslint.config.js",
+      "type": "config",
+      "name": "eslint.config.js",
+      "filePath": "frontend/eslint.config.js",
+      "summary": "ESLint flat configuration for the React frontend, enabling recommended rules plus React Hooks and React Refresh linting.",
+      "tags": ["configuration", "linting", "javascript", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:frontend/index.html",
+      "type": "file",
+      "name": "index.html",
+      "filePath": "frontend/index.html",
+      "summary": "HTML entry document for the Vite-powered React app, mounting the application root and loading the main script module.",
+      "tags": ["entry-point", "markup", "frontend"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:frontend/package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "frontend/package.json",
+      "summary": "Frontend package manifest declaring the React/Vite app's scripts, runtime dependencies, and dev tooling.",
+      "tags": ["configuration", "dependencies", "build-system", "frontend"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:frontend/src/App.css",
+      "type": "file",
+      "name": "App.css",
+      "filePath": "frontend/src/App.css",
+      "summary": "Application-level stylesheet defining layout and component styling for the main App views.",
+      "tags": ["styling", "markup", "frontend"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:frontend/src/index.css",
+      "type": "file",
+      "name": "index.css",
+      "filePath": "frontend/src/index.css",
+      "summary": "Global base stylesheet defining root variables, typography, and resets imported at the app entry point.",
+      "tags": ["styling", "markup", "frontend", "global"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:frontend/vite.config.js",
+      "type": "config",
+      "name": "vite.config.js",
+      "filePath": "frontend/vite.config.js",
+      "summary": "Vite build configuration enabling the React plugin for the frontend development and production builds.",
+      "tags": ["configuration", "build-system", "frontend", "vite"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "Project overview documenting the Enterprise Knowledge Assistant's features, tech stack, project structure, environment variables, and local setup instructions for the Flask/React RAG application.",
+      "tags": ["documentation", "entry-point", "overview", "setup"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:tests/conftest.py",
+      "type": "file",
+      "name": "conftest.py",
+      "filePath": "tests/conftest.py",
+      "summary": "Pytest configuration fixture file that adjusts the import path so backend modules can be imported during test collection.",
+      "tags": ["test", "configuration", "pytest"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_rag.py",
+      "type": "file",
+      "name": "test_rag.py",
+      "filePath": "tests/test_rag.py",
+      "summary": "Unit test suite for the RAG pipeline, mocking LangChain, OpenAI, and ChromaDB to verify chunking, embedding storage, vector store collection naming, and question answering with source retrieval.",
+      "tags": ["test", "rag", "pytest", "mocking"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_rag.py:test_load_and_chunk_returns_chunks",
+      "type": "function",
+      "name": "test_load_and_chunk_returns_chunks",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [11, 25],
+      "summary": "Verifies load_and_chunk invokes PyPDFLoader and RecursiveCharacterTextSplitter correctly and returns the split chunks.",
+      "tags": ["test", "unit-test", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_rag.py:test_embed_and_store_persists_chunks",
+      "type": "function",
+      "name": "test_embed_and_store_persists_chunks",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [28, 45],
+      "summary": "Verifies embed_and_store constructs OpenAI embeddings and a Chroma store and persists the chunks via add_documents.",
+      "tags": ["test", "unit-test", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_rag.py:test_get_vector_store_uses_correct_collection_name",
+      "type": "function",
+      "name": "test_get_vector_store_uses_correct_collection_name",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [48, 63],
+      "summary": "Verifies get_vector_store builds a Chroma store using the document-specific collection name and OpenAI embeddings.",
+      "tags": ["test", "unit-test", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_rag.py:test_answer_question_returns_answer_and_sources",
+      "type": "function",
+      "name": "test_answer_question_returns_answer_and_sources",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [80, 99],
+      "summary": "Verifies answer_question returns both an answer and source documents by mocking the retriever and LCEL chain components.",
+      "tags": ["test", "unit-test", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_rag.py:test_answer_question_uses_retriever_search_kwargs",
+      "type": "function",
+      "name": "test_answer_question_uses_retriever_search_kwargs",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [102, 117],
+      "summary": "Verifies answer_question configures the retriever with the expected search kwargs when querying the vector store.",
+      "tags": ["test", "unit-test", "mocking"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:tests/test_rag.py:SimpleChain",
+      "type": "class",
+      "name": "SimpleChain",
+      "filePath": "tests/test_rag.py",
+      "lineRange": [66, 77],
+      "summary": "Test double that emulates a LangChain runnable by implementing the pipe operators and invoke, allowing the LCEL chain to be exercised without real LangChain components.",
+      "tags": ["test", "mocking", "test-double"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:load_and_chunk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:embed_and_store",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:get_vector_store",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:answer_question",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:load_and_chunk",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:embed_and_store",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:get_vector_store",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "function:backend/rag.py:answer_question",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:backend/rag.py:answer_question",
+      "target": "function:backend/rag.py:get_vector_store",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "file:backend/rag.py",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:backend/rag.py",
+      "target": "file:tests/test_rag.py",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "function:tests/test_rag.py:test_load_and_chunk_returns_chunks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "function:tests/test_rag.py:test_embed_and_store_persists_chunks",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "function:tests/test_rag.py:test_get_vector_store_uses_correct_collection_name",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "function:tests/test_rag.py:test_answer_question_returns_answer_and_sources",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "function:tests/test_rag.py:test_answer_question_uses_retriever_search_kwargs",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:tests/test_rag.py",
+      "target": "class:tests/test_rag.py:SimpleChain",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "function:tests/test_rag.py:test_load_and_chunk_returns_chunks",
+      "target": "function:backend/rag.py:load_and_chunk",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_rag.py:test_embed_and_store_persists_chunks",
+      "target": "function:backend/rag.py:embed_and_store",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_rag.py:test_get_vector_store_uses_correct_collection_name",
+      "target": "function:backend/rag.py:get_vector_store",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_rag.py:test_answer_question_returns_answer_and_sources",
+      "target": "function:backend/rag.py:answer_question",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:tests/test_rag.py:test_answer_question_uses_retriever_search_kwargs",
+      "target": "function:backend/rag.py:answer_question",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:.env.example",
+      "target": "file:backend/rag.py",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:frontend/vite.config.js",
+      "target": "file:frontend/index.html",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:frontend/eslint.config.js",
+      "target": "file:frontend/index.html",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "document:backend/requirements.txt",
+      "target": "file:backend/rag.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:backend/rag.py",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

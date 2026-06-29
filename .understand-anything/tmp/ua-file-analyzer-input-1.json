@@ -1,0 +1,13 @@
+{
+  "projectRoot": "/Users/aksheenrathod/Desktop/Code/enterprise-knowledge-assistant",
+  "batchFiles": [
+    {"path": "backend/auth.py", "language": "python", "sizeLines": 81, "fileCategory": "code"},
+    {"path": "backend/create_tables.py", "language": "python", "sizeLines": 3, "fileCategory": "code"},
+    {"path": "backend/database.py", "language": "python", "sizeLines": 32, "fileCategory": "code"},
+    {"path": "backend/main.py", "language": "python", "sizeLines": 267, "fileCategory": "code"},
+    {"path": "backend/models.py", "language": "python", "sizeLines": 39, "fileCategory": "code"},
+    {"path": "tests/test_auth.py", "language": "python", "sizeLines": 100, "fileCategory": "code"},
+    {"path": "tests/test_main.py", "language": "python", "sizeLines": 92, "fileCategory": "code"}
+  ],
+  "batchImportData": {"backend/auth.py":["backend/database.py","backend/models.py"],"backend/create_tables.py":["backend/database.py"],"backend/database.py":["backend/models.py"],"backend/main.py":["backend/database.py","backend/models.py","backend/auth.py","backend/rag.py"],"backend/models.py":["backend/database.py"],"tests/test_auth.py":["backend/auth.py","backend/models.py","backend/database.py"],"tests/test_main.py":["backend/main.py"]}
+}

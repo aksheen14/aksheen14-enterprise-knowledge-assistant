@@ -90,7 +90,7 @@ def upload_documents():
             with get_db_context() as db:
                 new_document = Document(filename=filename, filepath=filepath, user_id=user_id)
                 db.add(new_document)
-                db.refresh(new_document)
+                db.flush()
                 document_id = new_document.id
         except Exception as e:
             return jsonify({"error": f"failed to save document metadata: {str(e)}"}), 500
@@ -196,19 +196,21 @@ def history():
     try:
         with get_db_context() as db:
             chat_history = db.query(ChatHistory).filter(ChatHistory.user_id == user_id).all()
+            results = [
+                {
+                    "question": chat.question,
+                    "answer": chat.answer,
+                    "sources": chat.sources,
+                    "asked_at": chat.asked_at.isoformat() if chat.asked_at else None,
+                    "document_id": chat.document_id
+                }
+                for chat in chat_history
+            ]
+        return jsonify(results), 200
     except Exception as e:
         return jsonify({"error": f"database error: {str(e)}"}), 500
 
-    return jsonify([
-        {
-            "question": chat.question,
-            "answer": chat.answer,
-            "sources": chat.sources,
-            "asked_at": chat.asked_at.isoformat() if chat.asked_at else None,
-            "document_id": chat.document_id
-        }
-        for chat in chat_history
-    ]), 200
+    
 
 @app.route("/documents", methods=["GET"])
 def get_documents():
@@ -220,17 +222,20 @@ def get_documents():
     try:
         with get_db_context() as db:
             documents = db.query(Document).filter(Document.user_id == user_id).all()
+            
+            results = [
+                {
+                    "id": doc.id,
+                    "filename": doc.filename,
+                    "uploaded_at": doc.uploaded_at.isoformat() if doc.uploaded_at else None
+                }
+                for doc in documents
+            ]
+            
     except Exception as e:
         return jsonify({"error": f"database error: {str(e)}"}), 500
 
-    return jsonify([
-        {
-            "id": doc.id,
-            "filename": doc.filename,
-            "uploaded_at": doc.uploaded_at.isoformat() if doc.uploaded_at else None
-        }
-        for doc in documents
-    ]), 200
+    return jsonify(results), 200
 
 @app.route("/documents/<int:document_id>", methods=["DELETE"])
 def delete_document(document_id):

@@ -1,0 +1,162 @@
+{
+  "nodes": [
+    {
+      "id": "file:frontend/src/App.jsx",
+      "type": "file",
+      "name": "App.jsx",
+      "filePath": "frontend/src/App.jsx",
+      "summary": "Router root for the React SPA defining routes for login, dashboard, and chat pages, with a PrivateRoute guard that checks for a JWT token in localStorage.",
+      "tags": ["entry-point", "routing", "component", "auth-guard"],
+      "complexity": "simple",
+      "languageNotes": "Uses react-router-dom route configuration with a higher-order PrivateRoute wrapper for client-side auth gating."
+    },
+    {
+      "id": "function:frontend/src/App.jsx:App",
+      "type": "function",
+      "name": "App",
+      "filePath": "frontend/src/App.jsx",
+      "lineRange": [12, 28],
+      "summary": "Top-level component declaring the application's route table, wrapping protected routes in PrivateRoute.",
+      "tags": ["routing", "component", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:frontend/src/api/client.js",
+      "type": "file",
+      "name": "client.js",
+      "filePath": "frontend/src/api/client.js",
+      "summary": "Axios API client that centralizes all backend calls (auth, document upload/list/delete, chat) and attaches the JWT bearer token to outgoing requests.",
+      "tags": ["service", "api-handler", "http-client", "auth"],
+      "complexity": "simple",
+      "languageNotes": "Axios instance with a request interceptor injecting the Authorization header from localStorage."
+    },
+    {
+      "id": "function:frontend/src/api/client.js:uploadDocument",
+      "type": "function",
+      "name": "uploadDocument",
+      "filePath": "frontend/src/api/client.js",
+      "lineRange": [22, 26],
+      "summary": "Uploads a PDF file to the backend by building a multipart FormData payload and POSTing it to the documents endpoint.",
+      "tags": ["api-handler", "upload", "serialization"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:frontend/src/components/Navbar.jsx",
+      "type": "file",
+      "name": "Navbar.jsx",
+      "filePath": "frontend/src/components/Navbar.jsx",
+      "summary": "Navigation bar component showing the logged-in user and providing a logout action that clears the JWT token and redirects to login.",
+      "tags": ["component", "navigation", "auth", "event-handler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:frontend/src/components/Navbar.jsx:Navbar",
+      "type": "function",
+      "name": "Navbar",
+      "filePath": "frontend/src/components/Navbar.jsx",
+      "lineRange": [3, 42],
+      "summary": "Renders the top navigation with a logout handler that removes auth credentials from localStorage and navigates to the login page.",
+      "tags": ["component", "navigation", "event-handler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:frontend/src/main.jsx",
+      "type": "file",
+      "name": "main.jsx",
+      "filePath": "frontend/src/main.jsx",
+      "summary": "Application bootstrap that mounts the root App component into the DOM and loads global stylesheet.",
+      "tags": ["entry-point", "bootstrap", "react"],
+      "complexity": "simple",
+      "languageNotes": "Vite/React 18 entry using ReactDOM.createRoot for concurrent rendering."
+    },
+    {
+      "id": "file:frontend/src/pages/Chat.jsx",
+      "type": "file",
+      "name": "Chat.jsx",
+      "filePath": "frontend/src/pages/Chat.jsx",
+      "summary": "Chat page that lets users ask questions about a selected document, rendering message history with source citations and auto-scrolling to the latest reply.",
+      "tags": ["component", "page", "chat", "api-handler"],
+      "complexity": "moderate",
+      "languageNotes": "Uses useState/useEffect/useRef hooks; auto-scroll via scrollIntoView on a ref sentinel element."
+    },
+    {
+      "id": "function:frontend/src/pages/Chat.jsx:Chat",
+      "type": "function",
+      "name": "Chat",
+      "filePath": "frontend/src/pages/Chat.jsx",
+      "lineRange": [5, 146],
+      "summary": "Chat page component managing question input, loading/error state, message list, and submitting questions to the backend via askQuestion.",
+      "tags": ["component", "page", "chat", "event-handler"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:frontend/src/pages/Dashboard.jsx",
+      "type": "file",
+      "name": "Dashboard.jsx",
+      "filePath": "frontend/src/pages/Dashboard.jsx",
+      "summary": "Dashboard page for managing PDF documents: fetches the document list, handles uploads with progress/feedback, supports deletion, and navigates to chat per document.",
+      "tags": ["component", "page", "document-management", "api-handler"],
+      "complexity": "moderate",
+      "languageNotes": "Coordinates multiple useState slices for upload, delete, and loading status with optimistic list updates."
+    },
+    {
+      "id": "function:frontend/src/pages/Dashboard.jsx:Dashboard",
+      "type": "function",
+      "name": "Dashboard",
+      "filePath": "frontend/src/pages/Dashboard.jsx",
+      "lineRange": [5, 164],
+      "summary": "Dashboard component that fetches, uploads, and deletes documents through the API client and renders the document list with per-item actions.",
+      "tags": ["component", "page", "document-management", "event-handler"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:frontend/src/pages/Login.jsx",
+      "type": "file",
+      "name": "Login.jsx",
+      "filePath": "frontend/src/pages/Login.jsx",
+      "summary": "Login/registration page that authenticates users via the API client, stores the returned JWT and user info in localStorage, and redirects to the dashboard.",
+      "tags": ["component", "page", "auth", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:frontend/src/pages/Login.jsx:Login",
+      "type": "function",
+      "name": "Login",
+      "filePath": "frontend/src/pages/Login.jsx",
+      "lineRange": [5, 109],
+      "summary": "Login component handling both registration and login flows, persisting auth tokens to localStorage and navigating to the dashboard on success.",
+      "tags": ["component", "page", "auth", "event-handler"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {"source": "file:frontend/src/App.jsx", "target": "file:frontend/src/pages/Login.jsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/App.jsx", "target": "file:frontend/src/pages/Dashboard.jsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/App.jsx", "target": "file:frontend/src/pages/Chat.jsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/App.jsx", "target": "file:frontend/src/components/Navbar.jsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/main.jsx", "target": "file:frontend/src/index.css", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/main.jsx", "target": "file:frontend/src/App.jsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/pages/Chat.jsx", "target": "file:frontend/src/api/client.js", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/pages/Dashboard.jsx", "target": "file:frontend/src/api/client.js", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:frontend/src/pages/Login.jsx", "target": "file:frontend/src/api/client.js", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:frontend/src/App.jsx", "target": "function:frontend/src/App.jsx:App", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/App.jsx", "target": "function:frontend/src/App.jsx:App", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:frontend/src/api/client.js", "target": "function:frontend/src/api/client.js:uploadDocument", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/api/client.js", "target": "function:frontend/src/api/client.js:uploadDocument", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:frontend/src/components/Navbar.jsx", "target": "function:frontend/src/components/Navbar.jsx:Navbar", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/components/Navbar.jsx", "target": "function:frontend/src/components/Navbar.jsx:Navbar", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:frontend/src/pages/Chat.jsx", "target": "function:frontend/src/pages/Chat.jsx:Chat", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/pages/Chat.jsx", "target": "function:frontend/src/pages/Chat.jsx:Chat", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:frontend/src/pages/Dashboard.jsx", "target": "function:frontend/src/pages/Dashboard.jsx:Dashboard", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/pages/Dashboard.jsx", "target": "function:frontend/src/pages/Dashboard.jsx:Dashboard", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:frontend/src/pages/Login.jsx", "target": "function:frontend/src/pages/Login.jsx:Login", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:frontend/src/pages/Login.jsx", "target": "function:frontend/src/pages/Login.jsx:Login", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:frontend/src/pages/Chat.jsx", "target": "file:frontend/src/api/client.js", "type": "depends_on", "direction": "forward", "weight": 0.6},
+    {"source": "file:frontend/src/pages/Dashboard.jsx", "target": "file:frontend/src/api/client.js", "type": "depends_on", "direction": "forward", "weight": 0.6},
+    {"source": "file:frontend/src/pages/Login.jsx", "target": "file:frontend/src/api/client.js", "type": "depends_on", "direction": "forward", "weight": 0.6},
+
+    {"source": "function:frontend/src/pages/Dashboard.jsx:Dashboard", "target": "function:frontend/src/api/client.js:uploadDocument", "type": "calls", "direction": "forward", "weight": 0.8}
+  ]
+}

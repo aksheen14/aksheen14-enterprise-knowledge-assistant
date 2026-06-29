@@ -1,0 +1,8 @@
+{
+  "projectRoot": "/Users/aksheenrathod/Desktop/Code/enterprise-knowledge-assistant",
+  "batchFiles": [
+    {"path": "backend/.dockerignore", "language": "unknown", "sizeLines": 35, "fileCategory": "infra"},
+    {"path": "backend/Dockerfile", "language": "dockerfile", "sizeLines": 7, "fileCategory": "infra"}
+  ],
+  "batchImportData": {"backend/.dockerignore":[],"backend/Dockerfile":[]}
+}

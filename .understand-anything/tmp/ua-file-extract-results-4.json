@@ -1,0 +1,873 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 13,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": ".env.example",
+      "language": "config",
+      "fileCategory": "config",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "definitions": [
+        {
+          "name": "DATABASE_URL",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 1,
+          "endLine": 1
+        },
+        {
+          "name": "OPENAI_API_KEY",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "name": "JWT_SECRET",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 3,
+          "endLine": 3
+        },
+        {
+          "name": "FLASK_ENV",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "name": "FLASK_APP",
+          "kind": "variable",
+          "fields": [],
+          "startLine": 5,
+          "endLine": 5
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "definitionCount": 5
+      }
+    },
+    {
+      "path": "backend/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 5,
+      "nonEmptyLines": 5,
+      "sections": [
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 2
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 1
+      }
+    },
+    {
+      "path": "backend/rag.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 75,
+      "nonEmptyLines": 58,
+      "functions": [
+        {
+          "name": "load_and_chunk",
+          "startLine": 23,
+          "endLine": 30,
+          "params": [
+            "file_path"
+          ]
+        },
+        {
+          "name": "embed_and_store",
+          "startLine": 32,
+          "endLine": 40,
+          "params": [
+            "chunks",
+            "document_id"
+          ]
+        },
+        {
+          "name": "get_vector_store",
+          "startLine": 42,
+          "endLine": 49,
+          "params": [
+            "document_id"
+          ]
+        },
+        {
+          "name": "answer_question",
+          "startLine": 51,
+          "endLine": 75,
+          "params": [
+            "question",
+            "document_id"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "load_and_chunk",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "embed_and_store",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "get_vector_store",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "answer_question",
+          "line": 51,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "load_and_chunk",
+          "callee": "PyPDFLoader",
+          "lineNumber": 24
+        },
+        {
+          "caller": "load_and_chunk",
+          "callee": "loader.load",
+          "lineNumber": 25
+        },
+        {
+          "caller": "load_and_chunk",
+          "callee": "RecursiveCharacterTextSplitter",
+          "lineNumber": 27
+        },
+        {
+          "caller": "load_and_chunk",
+          "callee": "text_splitter.split_documents",
+          "lineNumber": 28
+        },
+        {
+          "caller": "embed_and_store",
+          "callee": "OpenAIEmbeddings",
+          "lineNumber": 33
+        },
+        {
+          "caller": "embed_and_store",
+          "callee": "Chroma",
+          "lineNumber": 34
+        },
+        {
+          "caller": "embed_and_store",
+          "callee": "vector_store.add_documents",
+          "lineNumber": 39
+        },
+        {
+          "caller": "get_vector_store",
+          "callee": "OpenAIEmbeddings",
+          "lineNumber": 43
+        },
+        {
+          "caller": "get_vector_store",
+          "callee": "Chroma",
+          "lineNumber": 44
+        },
+        {
+          "caller": "answer_question",
+          "callee": "get_vector_store",
+          "lineNumber": 52
+        },
+        {
+          "caller": "answer_question",
+          "callee": "vector_store.as_retriever",
+          "lineNumber": 53
+        },
+        {
+          "caller": "answer_question",
+          "callee": "ChatOpenAI",
+          "lineNumber": 55
+        },
+        {
+          "caller": "answer_question",
+          "callee": "ChatPromptTemplate.from_messages",
+          "lineNumber": 57
+        },
+        {
+          "caller": "answer_question",
+          "callee": "RunnablePassthrough",
+          "lineNumber": 64
+        },
+        {
+          "caller": "answer_question",
+          "callee": "StrOutputParser",
+          "lineNumber": 67
+        },
+        {
+          "caller": "answer_question",
+          "callee": "chain.invoke",
+          "lineNumber": 70
+        },
+        {
+          "caller": "answer_question",
+          "callee": "retriever.invoke",
+          "lineNumber": 73
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "backend/requirements.txt",
+      "language": "txt",
+      "fileCategory": "docs",
+      "totalLines": 14,
+      "nonEmptyLines": 14,
+      "metrics": {}
+    },
+    {
+      "path": "frontend/eslint.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 21,
+      "nonEmptyLines": 20,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "frontend/index.html",
+      "language": "html",
+      "fileCategory": "markup",
+      "totalLines": 13,
+      "nonEmptyLines": 13,
+      "metrics": {}
+    },
+    {
+      "path": "frontend/package.json",
+      "language": "json",
+      "fileCategory": "config",
+      "totalLines": 29,
+      "nonEmptyLines": 29,
+      "sections": [
+        {
+          "heading": "name",
+          "level": 1,
+          "line": 2
+        },
+        {
+          "heading": "private",
+          "level": 1,
+          "line": 3
+        },
+        {
+          "heading": "version",
+          "level": 1,
+          "line": 4
+        },
+        {
+          "heading": "type",
+          "level": 1,
+          "line": 5
+        },
+        {
+          "heading": "scripts",
+          "level": 1,
+          "line": 6
+        },
+        {
+          "heading": "dependencies",
+          "level": 1,
+          "line": 12
+        },
+        {
+          "heading": "devDependencies",
+          "level": 1,
+          "line": 18
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 7
+      }
+    },
+    {
+      "path": "frontend/src/App.css",
+      "language": "css",
+      "fileCategory": "markup",
+      "totalLines": 184,
+      "nonEmptyLines": 158,
+      "metrics": {}
+    },
+    {
+      "path": "frontend/src/index.css",
+      "language": "css",
+      "fileCategory": "markup",
+      "totalLines": 111,
+      "nonEmptyLines": 100,
+      "metrics": {}
+    },
+    {
+      "path": "frontend/vite.config.js",
+      "language": "javascript",
+      "fileCategory": "code",
+      "totalLines": 7,
+      "nonEmptyLines": 6,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "fileCategory": "docs",
+      "totalLines": 98,
+      "nonEmptyLines": 73,
+      "sections": [
+        {
+          "heading": "Enterprise Knowledge Assistant",
+          "level": 1,
+          "line": 1
+        },
+        {
+          "heading": "Features",
+          "level": 2,
+          "line": 5
+        },
+        {
+          "heading": "Tech Stack",
+          "level": 2,
+          "line": 17
+        },
+        {
+          "heading": "Project Structure",
+          "level": 2,
+          "line": 30
+        },
+        {
+          "heading": "Prerequisites",
+          "level": 2,
+          "line": 37
+        },
+        {
+          "heading": "Environment Variables",
+          "level": 2,
+          "line": 47
+        },
+        {
+          "heading": "Local Setup Instructions",
+          "level": 2,
+          "line": 61
+        },
+        {
+          "heading": "1. Clone the repository",
+          "level": 3,
+          "line": 63
+        },
+        {
+          "heading": "2. Build and run the backend",
+          "level": 3,
+          "line": 70
+        },
+        {
+          "heading": "3. Install frontend dependencies and start the app",
+          "level": 3,
+          "line": 77
+        },
+        {
+          "heading": "Usage",
+          "level": 2,
+          "line": 92
+        }
+      ],
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0,
+        "sectionCount": 11
+      }
+    },
+    {
+      "path": "tests/conftest.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 10,
+      "nonEmptyLines": 8,
+      "metrics": {
+        "importCount": 0,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_rag.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 117,
+      "nonEmptyLines": 81,
+      "functions": [
+        {
+          "name": "test_load_and_chunk_returns_chunks",
+          "startLine": 11,
+          "endLine": 25,
+          "params": [
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_embed_and_store_persists_chunks",
+          "startLine": 28,
+          "endLine": 45,
+          "params": [
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_get_vector_store_uses_correct_collection_name",
+          "startLine": 48,
+          "endLine": 63,
+          "params": [
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_answer_question_returns_answer_and_sources",
+          "startLine": 80,
+          "endLine": 99,
+          "params": [
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_answer_question_uses_retriever_search_kwargs",
+          "startLine": 102,
+          "endLine": 117,
+          "params": [
+            "monkeypatch"
+          ]
+        }
+      ],
+      "classes": [
+        {
+          "name": "SimpleChain",
+          "startLine": 66,
+          "endLine": 77,
+          "methods": [
+            "__init__",
+            "__or__",
+            "__ror__",
+            "invoke"
+          ],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "test_load_and_chunk_returns_chunks",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "test_embed_and_store_persists_chunks",
+          "line": 28,
+          "isDefault": false
+        },
+        {
+          "name": "test_get_vector_store_uses_correct_collection_name",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "SimpleChain",
+          "line": 66,
+          "isDefault": false
+        },
+        {
+          "name": "test_answer_question_returns_answer_and_sources",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "test_answer_question_uses_retriever_search_kwargs",
+          "line": 102,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 12
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 14
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 14
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 16
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 18
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 18
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "rag.load_and_chunk",
+          "lineNumber": 20
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "rag.PyPDFLoader.assert_called_once_with",
+          "lineNumber": 22
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "rag.RecursiveCharacterTextSplitter.assert_called_once_with",
+          "lineNumber": 23
+        },
+        {
+          "caller": "test_load_and_chunk_returns_chunks",
+          "callee": "fake_splitter.split_documents.assert_called_once_with",
+          "lineNumber": 24
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 29
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 30
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 30
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 32
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "MagicMock",
+          "lineNumber": 33
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "rag.embed_and_store",
+          "lineNumber": 36
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "rag.OpenAIEmbeddings.assert_called_once_with",
+          "lineNumber": 38
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "rag.Chroma.assert_called_once_with",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_embed_and_store_persists_chunks",
+          "callee": "vector_store_mock.add_documents.assert_called_once_with",
+          "lineNumber": 44
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "MagicMock",
+          "lineNumber": 49
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 50
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "MagicMock",
+          "lineNumber": 50
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "MagicMock",
+          "lineNumber": 52
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "MagicMock",
+          "lineNumber": 53
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "rag.get_vector_store",
+          "lineNumber": 55
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "rag.OpenAIEmbeddings.assert_called_once_with",
+          "lineNumber": 57
+        },
+        {
+          "caller": "test_get_vector_store_uses_correct_collection_name",
+          "callee": "rag.Chroma.assert_called_once_with",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 81
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 86
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 89
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "classmethod",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "SimpleChain",
+          "lineNumber": 90
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 91
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "SimpleChain",
+          "lineNumber": 92
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "MagicMock",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "SimpleChain",
+          "lineNumber": 93
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "rag.answer_question",
+          "lineNumber": 95
+        },
+        {
+          "caller": "test_answer_question_returns_answer_and_sources",
+          "callee": "retriever.invoke.assert_called_once_with",
+          "lineNumber": 99
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 103
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 106
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 109
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 109
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 110
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 110
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "classmethod",
+          "lineNumber": 110
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "SimpleChain",
+          "lineNumber": 110
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 111
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 111
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 111
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 112
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 112
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "SimpleChain",
+          "lineNumber": 112
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "MagicMock",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "SimpleChain",
+          "lineNumber": 113
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "rag.answer_question",
+          "lineNumber": 115
+        },
+        {
+          "caller": "test_answer_question_uses_retriever_search_kwargs",
+          "callee": "vector_store.as_retriever.assert_called_once_with",
+          "lineNumber": 117
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 6,
+        "functionCount": 5,
+        "classCount": 1
+      }
+    }
+  ]
+}

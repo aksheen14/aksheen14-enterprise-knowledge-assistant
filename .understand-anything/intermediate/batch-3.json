@@ -1,0 +1,39 @@
+{
+  "nodes": [
+    {
+      "id": "service:backend/Dockerfile",
+      "type": "service",
+      "name": "Dockerfile",
+      "filePath": "backend/Dockerfile",
+      "summary": "Container definition for the Python Flask backend, building on python:3.12-slim, installing requirements, exposing port 5000, and launching main.py.",
+      "tags": ["containerization", "infrastructure", "deployment", "flask", "python"],
+      "complexity": "simple",
+      "languageNotes": "Single-stage build using the slim Python base image with --no-cache-dir to keep the image small."
+    },
+    {
+      "id": "service:backend/.dockerignore",
+      "type": "service",
+      "name": ".dockerignore",
+      "filePath": "backend/.dockerignore",
+      "summary": "Docker build context exclusion list that keeps git metadata, Python caches, virtualenvs, secrets, uploads, logs, and the Chroma vector store out of the backend image.",
+      "tags": ["containerization", "infrastructure", "build-system", "configuration"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "service:backend/Dockerfile",
+      "target": "file:backend/main.py",
+      "type": "deploys",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "service:backend/.dockerignore",
+      "target": "service:backend/Dockerfile",
+      "type": "related",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

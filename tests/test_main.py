@@ -18,7 +18,7 @@ def test_register_route_requires_email_and_password(client):
     response = client.post("/auth/register", json={})
 
     assert response.status_code == 400
-    assert response.json == {"error": "invalid request body"}
+    assert response.json == {"error": "email and password required"}
 
 
 def test_login_route_delegates_to_login_user(monkeypatch, client):

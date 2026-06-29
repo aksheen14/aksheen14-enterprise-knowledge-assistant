@@ -1,0 +1,1515 @@
+{
+  "scriptCompleted": true,
+  "filesAnalyzed": 7,
+  "filesSkipped": [],
+  "results": [
+    {
+      "path": "backend/auth.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 81,
+      "nonEmptyLines": 57,
+      "functions": [
+        {
+          "name": "register_user",
+          "startLine": 14,
+          "endLine": 27,
+          "params": [
+            "email",
+            "password"
+          ]
+        },
+        {
+          "name": "login_user",
+          "startLine": 29,
+          "endLine": 56,
+          "params": [
+            "email",
+            "password"
+          ]
+        },
+        {
+          "name": "verify_token",
+          "startLine": 58,
+          "endLine": 72,
+          "params": [
+            "token"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "register_user",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "login_user",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "verify_token",
+          "line": 58,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "register_user",
+          "callee": "get_db_context",
+          "lineNumber": 16
+        },
+        {
+          "caller": "register_user",
+          "callee": "db.query(User).filter(User.email == email).first",
+          "lineNumber": 17
+        },
+        {
+          "caller": "register_user",
+          "callee": "db.query(User).filter",
+          "lineNumber": 17
+        },
+        {
+          "caller": "register_user",
+          "callee": "db.query",
+          "lineNumber": 17
+        },
+        {
+          "caller": "register_user",
+          "callee": "jsonify",
+          "lineNumber": 19
+        },
+        {
+          "caller": "register_user",
+          "callee": "bcrypt.hashpw",
+          "lineNumber": 21
+        },
+        {
+          "caller": "register_user",
+          "callee": "password.encode",
+          "lineNumber": 21
+        },
+        {
+          "caller": "register_user",
+          "callee": "bcrypt.gensalt",
+          "lineNumber": 21
+        },
+        {
+          "caller": "register_user",
+          "callee": "User",
+          "lineNumber": 22
+        },
+        {
+          "caller": "register_user",
+          "callee": "hashed_password.decode",
+          "lineNumber": 22
+        },
+        {
+          "caller": "register_user",
+          "callee": "db.add",
+          "lineNumber": 24
+        },
+        {
+          "caller": "register_user",
+          "callee": "jsonify",
+          "lineNumber": 25
+        },
+        {
+          "caller": "register_user",
+          "callee": "jsonify",
+          "lineNumber": 27
+        },
+        {
+          "caller": "register_user",
+          "callee": "str",
+          "lineNumber": 27
+        },
+        {
+          "caller": "login_user",
+          "callee": "get_db_context",
+          "lineNumber": 31
+        },
+        {
+          "caller": "login_user",
+          "callee": "db.query(User).filter(User.email == email).first",
+          "lineNumber": 32
+        },
+        {
+          "caller": "login_user",
+          "callee": "db.query(User).filter",
+          "lineNumber": 32
+        },
+        {
+          "caller": "login_user",
+          "callee": "db.query",
+          "lineNumber": 32
+        },
+        {
+          "caller": "login_user",
+          "callee": "jsonify",
+          "lineNumber": 35
+        },
+        {
+          "caller": "login_user",
+          "callee": "bcrypt.checkpw",
+          "lineNumber": 37
+        },
+        {
+          "caller": "login_user",
+          "callee": "password.encode",
+          "lineNumber": 38
+        },
+        {
+          "caller": "login_user",
+          "callee": "existing_user.hashed_password.encode",
+          "lineNumber": 39
+        },
+        {
+          "caller": "login_user",
+          "callee": "jsonify",
+          "lineNumber": 43
+        },
+        {
+          "caller": "login_user",
+          "callee": "datetime.utcnow",
+          "lineNumber": 47
+        },
+        {
+          "caller": "login_user",
+          "callee": "timedelta",
+          "lineNumber": 47
+        },
+        {
+          "caller": "login_user",
+          "callee": "os.getenv",
+          "lineNumber": 50
+        },
+        {
+          "caller": "login_user",
+          "callee": "jwt.encode",
+          "lineNumber": 53
+        },
+        {
+          "caller": "login_user",
+          "callee": "jsonify",
+          "lineNumber": 54
+        },
+        {
+          "caller": "login_user",
+          "callee": "jsonify",
+          "lineNumber": 56
+        },
+        {
+          "caller": "login_user",
+          "callee": "str",
+          "lineNumber": 56
+        },
+        {
+          "caller": "verify_token",
+          "callee": "token.startswith",
+          "lineNumber": 60
+        },
+        {
+          "caller": "verify_token",
+          "callee": "jwt.decode",
+          "lineNumber": 63
+        },
+        {
+          "caller": "verify_token",
+          "callee": "os.getenv",
+          "lineNumber": 65
+        }
+      ],
+      "metrics": {
+        "importCount": 2,
+        "exportCount": 3,
+        "functionCount": 3,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "backend/create_tables.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 4,
+      "nonEmptyLines": 3,
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 0,
+        "functionCount": 0,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "backend/database.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 33,
+      "nonEmptyLines": 26,
+      "functions": [
+        {
+          "name": "init_db",
+          "startLine": 19,
+          "endLine": 21,
+          "params": []
+        },
+        {
+          "name": "get_db_context",
+          "startLine": 24,
+          "endLine": 33,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "init_db",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "get_db_context",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "init_db",
+          "callee": "models_Base.metadata.create_all",
+          "lineNumber": 21
+        },
+        {
+          "caller": "get_db_context",
+          "callee": "SessionLocal",
+          "lineNumber": 25
+        },
+        {
+          "caller": "get_db_context",
+          "callee": "db.commit",
+          "lineNumber": 28
+        },
+        {
+          "caller": "get_db_context",
+          "callee": "db.rollback",
+          "lineNumber": 30
+        },
+        {
+          "caller": "get_db_context",
+          "callee": "db.close",
+          "lineNumber": 33
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 2,
+        "functionCount": 2,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "backend/main.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 267,
+      "nonEmptyLines": 219,
+      "functions": [
+        {
+          "name": "register",
+          "startLine": 25,
+          "endLine": 39,
+          "params": []
+        },
+        {
+          "name": "login",
+          "startLine": 42,
+          "endLine": 56,
+          "params": []
+        },
+        {
+          "name": "upload_documents",
+          "startLine": 59,
+          "endLine": 109,
+          "params": []
+        },
+        {
+          "name": "ask_question",
+          "startLine": 112,
+          "endLine": 187,
+          "params": []
+        },
+        {
+          "name": "history",
+          "startLine": 190,
+          "endLine": 211,
+          "params": []
+        },
+        {
+          "name": "get_documents",
+          "startLine": 214,
+          "endLine": 233,
+          "params": []
+        },
+        {
+          "name": "delete_document",
+          "startLine": 236,
+          "endLine": 263,
+          "params": [
+            "document_id"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "register",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "login",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "upload_documents",
+          "line": 58,
+          "isDefault": false
+        },
+        {
+          "name": "ask_question",
+          "line": 111,
+          "isDefault": false
+        },
+        {
+          "name": "history",
+          "line": 189,
+          "isDefault": false
+        },
+        {
+          "name": "get_documents",
+          "line": 213,
+          "isDefault": false
+        },
+        {
+          "name": "delete_document",
+          "line": 235,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "register",
+          "callee": "request.get_json",
+          "lineNumber": 26
+        },
+        {
+          "caller": "register",
+          "callee": "jsonify",
+          "lineNumber": 28
+        },
+        {
+          "caller": "register",
+          "callee": "data.get",
+          "lineNumber": 30
+        },
+        {
+          "caller": "register",
+          "callee": "data.get",
+          "lineNumber": 31
+        },
+        {
+          "caller": "register",
+          "callee": "jsonify",
+          "lineNumber": 34
+        },
+        {
+          "caller": "register",
+          "callee": "register_user",
+          "lineNumber": 37
+        },
+        {
+          "caller": "register",
+          "callee": "jsonify",
+          "lineNumber": 39
+        },
+        {
+          "caller": "register",
+          "callee": "str",
+          "lineNumber": 39
+        },
+        {
+          "caller": "login",
+          "callee": "request.get_json",
+          "lineNumber": 44
+        },
+        {
+          "caller": "login",
+          "callee": "jsonify",
+          "lineNumber": 46
+        },
+        {
+          "caller": "login",
+          "callee": "data.get",
+          "lineNumber": 48
+        },
+        {
+          "caller": "login",
+          "callee": "data.get",
+          "lineNumber": 49
+        },
+        {
+          "caller": "login",
+          "callee": "jsonify",
+          "lineNumber": 52
+        },
+        {
+          "caller": "login",
+          "callee": "login_user",
+          "lineNumber": 54
+        },
+        {
+          "caller": "login",
+          "callee": "jsonify",
+          "lineNumber": 56
+        },
+        {
+          "caller": "login",
+          "callee": "str",
+          "lineNumber": 56
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "request.headers.get",
+          "lineNumber": 62
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "verify_token",
+          "lineNumber": 63
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 65
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "request.files.get",
+          "lineNumber": 68
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 70
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "secure_filename",
+          "lineNumber": 73
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 75
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "os.path.join",
+          "lineNumber": 77
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "file.save",
+          "lineNumber": 79
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 81
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "str",
+          "lineNumber": 81
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "load_and_chunk",
+          "lineNumber": 85
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 87
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "str",
+          "lineNumber": 87
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "get_db_context",
+          "lineNumber": 90
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "Document",
+          "lineNumber": 91
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "db.add",
+          "lineNumber": 92
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "db.refresh",
+          "lineNumber": 93
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 96
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "str",
+          "lineNumber": 96
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "embed_and_store",
+          "lineNumber": 100
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 102
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "str",
+          "lineNumber": 102
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 104
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "jsonify",
+          "lineNumber": 109
+        },
+        {
+          "caller": "upload_documents",
+          "callee": "str",
+          "lineNumber": 109
+        },
+        {
+          "caller": "ask_question",
+          "callee": "request.headers.get",
+          "lineNumber": 115
+        },
+        {
+          "caller": "ask_question",
+          "callee": "verify_token",
+          "lineNumber": 116
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 118
+        },
+        {
+          "caller": "ask_question",
+          "callee": "request.get_json",
+          "lineNumber": 121
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 123
+        },
+        {
+          "caller": "ask_question",
+          "callee": "data.get",
+          "lineNumber": 125
+        },
+        {
+          "caller": "ask_question",
+          "callee": "isinstance",
+          "lineNumber": 126
+        },
+        {
+          "caller": "ask_question",
+          "callee": "question.strip",
+          "lineNumber": 126
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 127
+        },
+        {
+          "caller": "ask_question",
+          "callee": "data.get",
+          "lineNumber": 129
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 131
+        },
+        {
+          "caller": "ask_question",
+          "callee": "int",
+          "lineNumber": 134
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 136
+        },
+        {
+          "caller": "ask_question",
+          "callee": "get_db_context",
+          "lineNumber": 140
+        },
+        {
+          "caller": "ask_question",
+          "callee": "db.query(Document).filter(\n                    Document.id == document_id,\n                    Document.user_id == user_id,\n                ).first",
+          "lineNumber": 141
+        },
+        {
+          "caller": "ask_question",
+          "callee": "db.query(Document).filter",
+          "lineNumber": 141
+        },
+        {
+          "caller": "ask_question",
+          "callee": "db.query",
+          "lineNumber": 141
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 146
+        },
+        {
+          "caller": "ask_question",
+          "callee": "str",
+          "lineNumber": 146
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 149
+        },
+        {
+          "caller": "ask_question",
+          "callee": "answer_question",
+          "lineNumber": 153
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 155
+        },
+        {
+          "caller": "ask_question",
+          "callee": "str",
+          "lineNumber": 155
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 158
+        },
+        {
+          "caller": "ask_question",
+          "callee": "getattr",
+          "lineNumber": 162
+        },
+        {
+          "caller": "ask_question",
+          "callee": "getattr",
+          "lineNumber": 163
+        },
+        {
+          "caller": "ask_question",
+          "callee": "metadata.get",
+          "lineNumber": 164
+        },
+        {
+          "caller": "ask_question",
+          "callee": "isinstance",
+          "lineNumber": 164
+        },
+        {
+          "caller": "ask_question",
+          "callee": "sources.append",
+          "lineNumber": 165
+        },
+        {
+          "caller": "ask_question",
+          "callee": "json.dumps",
+          "lineNumber": 167
+        },
+        {
+          "caller": "ask_question",
+          "callee": "ChatHistory",
+          "lineNumber": 169
+        },
+        {
+          "caller": "ask_question",
+          "callee": "get_db_context",
+          "lineNumber": 178
+        },
+        {
+          "caller": "ask_question",
+          "callee": "db.add",
+          "lineNumber": 179
+        },
+        {
+          "caller": "ask_question",
+          "callee": "db.commit",
+          "lineNumber": 180
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 182
+        },
+        {
+          "caller": "ask_question",
+          "callee": "str",
+          "lineNumber": 182
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 184
+        },
+        {
+          "caller": "ask_question",
+          "callee": "jsonify",
+          "lineNumber": 187
+        },
+        {
+          "caller": "ask_question",
+          "callee": "str",
+          "lineNumber": 187
+        },
+        {
+          "caller": "history",
+          "callee": "request.headers.get",
+          "lineNumber": 191
+        },
+        {
+          "caller": "history",
+          "callee": "verify_token",
+          "lineNumber": 192
+        },
+        {
+          "caller": "history",
+          "callee": "jsonify",
+          "lineNumber": 194
+        },
+        {
+          "caller": "history",
+          "callee": "get_db_context",
+          "lineNumber": 197
+        },
+        {
+          "caller": "history",
+          "callee": "db.query(ChatHistory).filter(ChatHistory.user_id == user_id).all",
+          "lineNumber": 198
+        },
+        {
+          "caller": "history",
+          "callee": "db.query(ChatHistory).filter",
+          "lineNumber": 198
+        },
+        {
+          "caller": "history",
+          "callee": "db.query",
+          "lineNumber": 198
+        },
+        {
+          "caller": "history",
+          "callee": "jsonify",
+          "lineNumber": 200
+        },
+        {
+          "caller": "history",
+          "callee": "str",
+          "lineNumber": 200
+        },
+        {
+          "caller": "history",
+          "callee": "jsonify",
+          "lineNumber": 202
+        },
+        {
+          "caller": "history",
+          "callee": "chat.asked_at.isoformat",
+          "lineNumber": 207
+        },
+        {
+          "caller": "get_documents",
+          "callee": "request.headers.get",
+          "lineNumber": 215
+        },
+        {
+          "caller": "get_documents",
+          "callee": "verify_token",
+          "lineNumber": 216
+        },
+        {
+          "caller": "get_documents",
+          "callee": "jsonify",
+          "lineNumber": 218
+        },
+        {
+          "caller": "get_documents",
+          "callee": "get_db_context",
+          "lineNumber": 221
+        },
+        {
+          "caller": "get_documents",
+          "callee": "db.query(Document).filter(Document.user_id == user_id).all",
+          "lineNumber": 222
+        },
+        {
+          "caller": "get_documents",
+          "callee": "db.query(Document).filter",
+          "lineNumber": 222
+        },
+        {
+          "caller": "get_documents",
+          "callee": "db.query",
+          "lineNumber": 222
+        },
+        {
+          "caller": "get_documents",
+          "callee": "jsonify",
+          "lineNumber": 224
+        },
+        {
+          "caller": "get_documents",
+          "callee": "str",
+          "lineNumber": 224
+        },
+        {
+          "caller": "get_documents",
+          "callee": "jsonify",
+          "lineNumber": 226
+        },
+        {
+          "caller": "get_documents",
+          "callee": "doc.uploaded_at.isoformat",
+          "lineNumber": 230
+        },
+        {
+          "caller": "delete_document",
+          "callee": "request.headers.get",
+          "lineNumber": 237
+        },
+        {
+          "caller": "delete_document",
+          "callee": "verify_token",
+          "lineNumber": 238
+        },
+        {
+          "caller": "delete_document",
+          "callee": "jsonify",
+          "lineNumber": 240
+        },
+        {
+          "caller": "delete_document",
+          "callee": "get_db_context",
+          "lineNumber": 243
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query(Document).filter(\n                Document.id == document_id,\n                Document.user_id == user_id\n            ).first",
+          "lineNumber": 244
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query(Document).filter",
+          "lineNumber": 244
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query",
+          "lineNumber": 244
+        },
+        {
+          "caller": "delete_document",
+          "callee": "jsonify",
+          "lineNumber": 250
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query(ChatHistory).filter(ChatHistory.document_id == document_id).delete",
+          "lineNumber": 252
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query(ChatHistory).filter",
+          "lineNumber": 252
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.query",
+          "lineNumber": 252
+        },
+        {
+          "caller": "delete_document",
+          "callee": "db.delete",
+          "lineNumber": 253
+        },
+        {
+          "caller": "delete_document",
+          "callee": "os.path.isfile",
+          "lineNumber": 255
+        },
+        {
+          "caller": "delete_document",
+          "callee": "os.remove",
+          "lineNumber": 257
+        },
+        {
+          "caller": "delete_document",
+          "callee": "print",
+          "lineNumber": 259
+        },
+        {
+          "caller": "delete_document",
+          "callee": "jsonify",
+          "lineNumber": 261
+        },
+        {
+          "caller": "delete_document",
+          "callee": "jsonify",
+          "lineNumber": 263
+        },
+        {
+          "caller": "delete_document",
+          "callee": "str",
+          "lineNumber": 263
+        }
+      ],
+      "metrics": {
+        "importCount": 4,
+        "exportCount": 7,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "backend/models.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 39,
+      "nonEmptyLines": 32,
+      "classes": [
+        {
+          "name": "User",
+          "startLine": 6,
+          "endLine": 14,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "Document",
+          "startLine": 16,
+          "endLine": 25,
+          "methods": [],
+          "properties": []
+        },
+        {
+          "name": "ChatHistory",
+          "startLine": 27,
+          "endLine": 39,
+          "methods": [],
+          "properties": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "User",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "Document",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "ChatHistory",
+          "line": 27,
+          "isDefault": false
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 3,
+        "functionCount": 0,
+        "classCount": 3
+      }
+    },
+    {
+      "path": "tests/test_auth.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 100,
+      "nonEmptyLines": 72,
+      "functions": [
+        {
+          "name": "db_engine",
+          "startLine": 19,
+          "endLine": 22,
+          "params": []
+        },
+        {
+          "name": "db_session",
+          "startLine": 26,
+          "endLine": 39,
+          "params": [
+            "db_engine",
+            "monkeypatch"
+          ]
+        },
+        {
+          "name": "test_register_user_creates_user",
+          "startLine": 42,
+          "endLine": 50,
+          "params": [
+            "db_session"
+          ]
+        },
+        {
+          "name": "test_register_user_rejects_duplicate_email",
+          "startLine": 53,
+          "endLine": 61,
+          "params": [
+            "db_session"
+          ]
+        },
+        {
+          "name": "test_login_user_returns_token",
+          "startLine": 64,
+          "endLine": 77,
+          "params": [
+            "db_session"
+          ]
+        },
+        {
+          "name": "test_login_user_rejects_invalid_password",
+          "startLine": 80,
+          "endLine": 90,
+          "params": [
+            "db_session"
+          ]
+        },
+        {
+          "name": "test_verify_token_accepts_bearer_token",
+          "startLine": 93,
+          "endLine": 100,
+          "params": []
+        }
+      ],
+      "exports": [
+        {
+          "name": "db_engine",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "db_session",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "test_register_user_creates_user",
+          "line": 42,
+          "isDefault": false
+        },
+        {
+          "name": "test_register_user_rejects_duplicate_email",
+          "line": 53,
+          "isDefault": false
+        },
+        {
+          "name": "test_login_user_returns_token",
+          "line": 64,
+          "isDefault": false
+        },
+        {
+          "name": "test_login_user_rejects_invalid_password",
+          "line": 80,
+          "isDefault": false
+        },
+        {
+          "name": "test_verify_token_accepts_bearer_token",
+          "line": 93,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "db_engine",
+          "callee": "create_engine",
+          "lineNumber": 20
+        },
+        {
+          "caller": "db_engine",
+          "callee": "Base.metadata.create_all",
+          "lineNumber": 21
+        },
+        {
+          "caller": "db_session",
+          "callee": "sessionmaker",
+          "lineNumber": 27
+        },
+        {
+          "caller": "db_session",
+          "callee": "Session",
+          "lineNumber": 28
+        },
+        {
+          "caller": "fake_get_db",
+          "callee": "session.close",
+          "lineNumber": 34
+        },
+        {
+          "caller": "db_session",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 36
+        },
+        {
+          "caller": "db_session",
+          "callee": "session.rollback",
+          "lineNumber": 38
+        },
+        {
+          "caller": "db_session",
+          "callee": "session.close",
+          "lineNumber": 39
+        },
+        {
+          "caller": "test_register_user_creates_user",
+          "callee": "register_user",
+          "lineNumber": 43
+        },
+        {
+          "caller": "test_register_user_creates_user",
+          "callee": "db_session.query(User).filter(User.email == \"test@example.com\").first",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_register_user_creates_user",
+          "callee": "db_session.query(User).filter",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_register_user_creates_user",
+          "callee": "db_session.query",
+          "lineNumber": 48
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "User",
+          "lineNumber": 54
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "bcrypt.hashpw(b\"secret\", bcrypt.gensalt()).decode",
+          "lineNumber": 54
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "bcrypt.hashpw",
+          "lineNumber": 54
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "bcrypt.gensalt",
+          "lineNumber": 54
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "db_session.add",
+          "lineNumber": 55
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "db_session.commit",
+          "lineNumber": 56
+        },
+        {
+          "caller": "test_register_user_rejects_duplicate_email",
+          "callee": "register_user",
+          "lineNumber": 58
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "bcrypt.hashpw(password.encode(\"utf-8\"), bcrypt.gensalt()).decode",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "bcrypt.hashpw",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "password.encode",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "bcrypt.gensalt",
+          "lineNumber": 66
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "User",
+          "lineNumber": 67
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "db_session.add",
+          "lineNumber": 68
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "db_session.commit",
+          "lineNumber": 69
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "login_user",
+          "lineNumber": 71
+        },
+        {
+          "caller": "test_login_user_returns_token",
+          "callee": "verify_token",
+          "lineNumber": 77
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "bcrypt.hashpw(password.encode(\"utf-8\"), bcrypt.gensalt()).decode",
+          "lineNumber": 82
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "bcrypt.hashpw",
+          "lineNumber": 82
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "password.encode",
+          "lineNumber": 82
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "bcrypt.gensalt",
+          "lineNumber": 82
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "User",
+          "lineNumber": 83
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "db_session.add",
+          "lineNumber": 84
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "db_session.commit",
+          "lineNumber": 85
+        },
+        {
+          "caller": "test_login_user_rejects_invalid_password",
+          "callee": "login_user",
+          "lineNumber": 87
+        },
+        {
+          "caller": "test_verify_token_accepts_bearer_token",
+          "callee": "datetime.utcnow",
+          "lineNumber": 96
+        },
+        {
+          "caller": "test_verify_token_accepts_bearer_token",
+          "callee": "timedelta",
+          "lineNumber": 96
+        },
+        {
+          "caller": "test_verify_token_accepts_bearer_token",
+          "callee": "jwt.encode",
+          "lineNumber": 98
+        },
+        {
+          "caller": "test_verify_token_accepts_bearer_token",
+          "callee": "verify_token",
+          "lineNumber": 100
+        },
+        {
+          "caller": "test_verify_token_accepts_bearer_token",
+          "callee": "\"Bearer {}\".format",
+          "lineNumber": 100
+        }
+      ],
+      "metrics": {
+        "importCount": 3,
+        "exportCount": 7,
+        "functionCount": 7,
+        "classCount": 0
+      }
+    },
+    {
+      "path": "tests/test_main.py",
+      "language": "python",
+      "fileCategory": "code",
+      "totalLines": 92,
+      "nonEmptyLines": 68,
+      "functions": [
+        {
+          "name": "client",
+          "startLine": 13,
+          "endLine": 14,
+          "params": []
+        },
+        {
+          "name": "test_register_route_requires_email_and_password",
+          "startLine": 17,
+          "endLine": 21,
+          "params": [
+            "client"
+          ]
+        },
+        {
+          "name": "test_login_route_delegates_to_login_user",
+          "startLine": 24,
+          "endLine": 37,
+          "params": [
+            "monkeypatch",
+            "client"
+          ]
+        },
+        {
+          "name": "test_history_route_returns_user_chat_history",
+          "startLine": 40,
+          "endLine": 92,
+          "params": [
+            "monkeypatch",
+            "client"
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "name": "client",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "test_register_route_requires_email_and_password",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "test_login_route_delegates_to_login_user",
+          "line": 24,
+          "isDefault": false
+        },
+        {
+          "name": "test_history_route_returns_user_chat_history",
+          "line": 40,
+          "isDefault": false
+        }
+      ],
+      "callGraph": [
+        {
+          "caller": "client",
+          "callee": "main.app.test_client",
+          "lineNumber": 14
+        },
+        {
+          "caller": "test_register_route_requires_email_and_password",
+          "callee": "client.post",
+          "lineNumber": 18
+        },
+        {
+          "caller": "test_login_route_delegates_to_login_user",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 25
+        },
+        {
+          "caller": "test_login_route_delegates_to_login_user",
+          "callee": "jsonify",
+          "lineNumber": 28
+        },
+        {
+          "caller": "test_login_route_delegates_to_login_user",
+          "callee": "client.post",
+          "lineNumber": 31
+        },
+        {
+          "caller": "query",
+          "callee": "MagicMock",
+          "lineNumber": 56
+        },
+        {
+          "caller": "query",
+          "callee": "datetime",
+          "lineNumber": 60
+        },
+        {
+          "caller": "query",
+          "callee": "DummyQuery",
+          "lineNumber": 63
+        },
+        {
+          "caller": "__enter__",
+          "callee": "DummyDB",
+          "lineNumber": 68
+        },
+        {
+          "caller": "fake_get_db_context",
+          "callee": "DummyContext",
+          "lineNumber": 73
+        },
+        {
+          "caller": "test_history_route_returns_user_chat_history",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 75
+        },
+        {
+          "caller": "test_history_route_returns_user_chat_history",
+          "callee": "monkeypatch.setattr",
+          "lineNumber": 76
+        },
+        {
+          "caller": "test_history_route_returns_user_chat_history",
+          "callee": "client.get",
+          "lineNumber": 78
+        }
+      ],
+      "metrics": {
+        "importCount": 1,
+        "exportCount": 4,
+        "functionCount": 4,
+        "classCount": 0
+      }
+    }
+  ]
+}

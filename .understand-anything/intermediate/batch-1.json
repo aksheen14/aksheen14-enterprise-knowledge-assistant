@@ -1,0 +1,382 @@
+{
+  "nodes": [
+    {
+      "id": "file:backend/auth.py",
+      "type": "file",
+      "name": "auth.py",
+      "filePath": "backend/auth.py",
+      "summary": "Authentication helpers handling user registration, login with JWT issuance, and bearer-token verification using bcrypt password hashing.",
+      "tags": ["service", "security", "validation", "authentication"],
+      "complexity": "moderate",
+      "languageNotes": "Uses bcrypt for password hashing and PyJWT for stateless token auth, with credentials/secret read from environment variables."
+    },
+    {
+      "id": "function:backend/auth.py:register_user",
+      "type": "function",
+      "name": "register_user",
+      "filePath": "backend/auth.py",
+      "lineRange": [14, 27],
+      "summary": "Creates a new user after checking for an existing email, hashing the password with bcrypt before persisting via the DB context.",
+      "tags": ["service", "validation", "authentication"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:backend/auth.py:login_user",
+      "type": "function",
+      "name": "login_user",
+      "filePath": "backend/auth.py",
+      "lineRange": [29, 56],
+      "summary": "Validates user credentials with bcrypt and issues a signed JWT access token with an expiry claim on success.",
+      "tags": ["service", "security", "authentication"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:backend/auth.py:verify_token",
+      "type": "function",
+      "name": "verify_token",
+      "filePath": "backend/auth.py",
+      "lineRange": [58, 72],
+      "summary": "Parses a Bearer authorization header and decodes the JWT to extract the authenticated user id.",
+      "tags": ["security", "validation", "authentication"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:backend/create_tables.py",
+      "type": "file",
+      "name": "create_tables.py",
+      "filePath": "backend/create_tables.py",
+      "summary": "Tiny bootstrap script that invokes database initialization to create all SQLAlchemy tables.",
+      "tags": ["script", "database", "migration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:backend/database.py",
+      "type": "file",
+      "name": "database.py",
+      "filePath": "backend/database.py",
+      "summary": "Configures the SQLAlchemy engine and session factory, and provides a context-managed DB session plus table creation helper.",
+      "tags": ["database", "service", "configuration"],
+      "complexity": "simple",
+      "languageNotes": "Uses a contextmanager-style session helper that commits on success and rolls back on exception."
+    },
+    {
+      "id": "function:backend/database.py:init_db",
+      "type": "function",
+      "name": "init_db",
+      "filePath": "backend/database.py",
+      "lineRange": [19, 21],
+      "summary": "Creates all database tables from the SQLAlchemy declarative Base metadata.",
+      "tags": ["database", "migration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:backend/database.py:get_db_context",
+      "type": "function",
+      "name": "get_db_context",
+      "filePath": "backend/database.py",
+      "lineRange": [24, 33],
+      "summary": "Yields a scoped DB session that commits on success, rolls back on error, and always closes the connection.",
+      "tags": ["database", "service", "factory"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:backend/main.py",
+      "type": "file",
+      "name": "main.py",
+      "filePath": "backend/main.py",
+      "summary": "Flask application entry point defining all HTTP routes for auth, document upload, RAG question answering, chat history, and document management.",
+      "tags": ["entry-point", "api-handler", "service"],
+      "complexity": "complex",
+      "languageNotes": "Flask routes delegate auth to backend.auth and document RAG operations to backend.rag, persisting via context-managed SQLAlchemy sessions."
+    },
+    {
+      "id": "endpoint:backend/main.py:POST-/auth/register",
+      "type": "endpoint",
+      "name": "POST /auth/register",
+      "filePath": "backend/main.py",
+      "lineRange": [25, 39],
+      "summary": "Registration endpoint that validates the request body and delegates user creation to register_user.",
+      "tags": ["api-handler", "authentication", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "endpoint:backend/main.py:POST-/auth/login",
+      "type": "endpoint",
+      "name": "POST /auth/login",
+      "filePath": "backend/main.py",
+      "lineRange": [42, 56],
+      "summary": "Login endpoint that validates credentials and delegates token issuance to login_user.",
+      "tags": ["api-handler", "authentication", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "endpoint:backend/main.py:POST-/documents/upload",
+      "type": "endpoint",
+      "name": "POST /documents/upload",
+      "filePath": "backend/main.py",
+      "lineRange": [59, 109],
+      "summary": "Authenticated endpoint that saves an uploaded PDF, chunks and embeds it into the vector store, and records the document in the database.",
+      "tags": ["api-handler", "data-pipeline", "upload"],
+      "complexity": "complex"
+    },
+    {
+      "id": "endpoint:backend/main.py:POST-/documents/ask",
+      "type": "endpoint",
+      "name": "POST /documents/ask",
+      "filePath": "backend/main.py",
+      "lineRange": [112, 187],
+      "summary": "Authenticated RAG endpoint that answers a question against a user's document and persists the Q&A with sources to chat history.",
+      "tags": ["api-handler", "rag", "data-pipeline"],
+      "complexity": "complex"
+    },
+    {
+      "id": "endpoint:backend/main.py:GET-/documents/history",
+      "type": "endpoint",
+      "name": "GET /documents/history",
+      "filePath": "backend/main.py",
+      "lineRange": [190, 211],
+      "summary": "Authenticated endpoint returning the chat history records for the current user.",
+      "tags": ["api-handler", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "endpoint:backend/main.py:GET-/documents",
+      "type": "endpoint",
+      "name": "GET /documents",
+      "filePath": "backend/main.py",
+      "lineRange": [214, 233],
+      "summary": "Authenticated endpoint listing the documents uploaded by the current user.",
+      "tags": ["api-handler", "data-model"],
+      "complexity": "simple"
+    },
+    {
+      "id": "endpoint:backend/main.py:DELETE-/documents/<int:document_id>",
+      "type": "endpoint",
+      "name": "DELETE /documents/<int:document_id>",
+      "filePath": "backend/main.py",
+      "lineRange": [236, 263],
+      "summary": "Authenticated endpoint that deletes a user's document, its chat history, and the underlying file from disk.",
+      "tags": ["api-handler", "data-model"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:backend/models.py",
+      "type": "file",
+      "name": "models.py",
+      "filePath": "backend/models.py",
+      "summary": "SQLAlchemy ORM models defining the User, Document, and ChatHistory tables and their relationships.",
+      "tags": ["data-model", "database", "type-definition"],
+      "complexity": "simple",
+      "languageNotes": "Declarative SQLAlchemy models extending a shared Base, mapping users, uploaded documents, and chat Q&A history."
+    },
+    {
+      "id": "class:backend/models.py:User",
+      "type": "class",
+      "name": "User",
+      "filePath": "backend/models.py",
+      "lineRange": [6, 14],
+      "summary": "ORM model representing an application user with email and hashed password.",
+      "tags": ["data-model", "database", "authentication"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:backend/models.py:Document",
+      "type": "class",
+      "name": "Document",
+      "filePath": "backend/models.py",
+      "lineRange": [16, 25],
+      "summary": "ORM model representing an uploaded document owned by a user, including filename and upload timestamp.",
+      "tags": ["data-model", "database"],
+      "complexity": "simple"
+    },
+    {
+      "id": "class:backend/models.py:ChatHistory",
+      "type": "class",
+      "name": "ChatHistory",
+      "filePath": "backend/models.py",
+      "lineRange": [27, 39],
+      "summary": "ORM model storing a user's question, the generated answer, sources, and timestamp linked to a document.",
+      "tags": ["data-model", "database"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_auth.py",
+      "type": "file",
+      "name": "test_auth.py",
+      "filePath": "tests/test_auth.py",
+      "summary": "Pytest suite for the auth module covering registration, duplicate-email rejection, login token issuance, invalid password handling, and token verification using an in-memory SQLite session.",
+      "tags": ["test", "authentication", "validation"],
+      "complexity": "moderate",
+      "languageNotes": "Uses pytest fixtures with monkeypatch to swap the DB context for an in-memory SQLite session."
+    },
+    {
+      "id": "function:tests/test_auth.py:db_session",
+      "type": "function",
+      "name": "db_session",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [26, 39],
+      "summary": "Pytest fixture providing an in-memory SQLite session and monkeypatching the production DB context to use it.",
+      "tags": ["test", "factory", "database"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_auth.py:test_register_user_creates_user",
+      "type": "function",
+      "name": "test_register_user_creates_user",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [42, 50],
+      "summary": "Verifies register_user persists a new user row to the database.",
+      "tags": ["test", "authentication"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_auth.py:test_register_user_rejects_duplicate_email",
+      "type": "function",
+      "name": "test_register_user_rejects_duplicate_email",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [53, 61],
+      "summary": "Verifies register_user rejects registration when the email already exists.",
+      "tags": ["test", "authentication", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_auth.py:test_login_user_returns_token",
+      "type": "function",
+      "name": "test_login_user_returns_token",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [64, 77],
+      "summary": "Verifies login_user returns a valid JWT that verify_token can decode for a seeded user.",
+      "tags": ["test", "authentication", "security"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_auth.py:test_login_user_rejects_invalid_password",
+      "type": "function",
+      "name": "test_login_user_rejects_invalid_password",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [80, 90],
+      "summary": "Verifies login_user rejects authentication when the supplied password is incorrect.",
+      "tags": ["test", "authentication", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:tests/test_auth.py:test_verify_token_accepts_bearer_token",
+      "type": "function",
+      "name": "test_verify_token_accepts_bearer_token",
+      "filePath": "tests/test_auth.py",
+      "lineRange": [93, 100],
+      "summary": "Verifies verify_token correctly decodes a valid Bearer-prefixed JWT.",
+      "tags": ["test", "security", "authentication"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tests/test_main.py",
+      "type": "file",
+      "name": "test_main.py",
+      "filePath": "tests/test_main.py",
+      "summary": "Pytest suite for the Flask app exercising the register validation, login route delegation, and chat history routes using the test client and monkeypatched dependencies.",
+      "tags": ["test", "api-handler", "integration"],
+      "complexity": "moderate",
+      "languageNotes": "Uses Flask's test_client fixture and monkeypatch to stub DB context and auth helpers for route-level tests."
+    },
+    {
+      "id": "function:tests/test_main.py:test_login_route_delegates_to_login_user",
+      "type": "function",
+      "name": "test_login_route_delegates_to_login_user",
+      "filePath": "tests/test_main.py",
+      "lineRange": [24, 37],
+      "summary": "Verifies the login route delegates to login_user by monkeypatching it and asserting the response.",
+      "tags": ["test", "api-handler", "authentication"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:tests/test_main.py:test_history_route_returns_user_chat_history",
+      "type": "function",
+      "name": "test_history_route_returns_user_chat_history",
+      "filePath": "tests/test_main.py",
+      "lineRange": [40, 92],
+      "summary": "Verifies the history route returns a user's chat history using stubbed DB context and token verification.",
+      "tags": ["test", "api-handler", "data-model"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {"source": "file:backend/auth.py", "target": "file:backend/database.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/auth.py", "target": "file:backend/models.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/create_tables.py", "target": "file:backend/database.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/database.py", "target": "file:backend/models.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/main.py", "target": "file:backend/database.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/main.py", "target": "file:backend/models.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/main.py", "target": "file:backend/auth.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/main.py", "target": "file:backend/rag.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:backend/models.py", "target": "file:backend/database.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:tests/test_auth.py", "target": "file:backend/auth.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:tests/test_auth.py", "target": "file:backend/models.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:tests/test_auth.py", "target": "file:backend/database.py", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:tests/test_main.py", "target": "file:backend/main.py", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:register_user", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:login_user", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:verify_token", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:register_user", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:login_user", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:backend/auth.py", "target": "function:backend/auth.py:verify_token", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:backend/database.py", "target": "function:backend/database.py:init_db", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/database.py", "target": "function:backend/database.py:get_db_context", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/database.py", "target": "function:backend/database.py:init_db", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:backend/database.py", "target": "function:backend/database.py:get_db_context", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:POST-/auth/register", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:POST-/auth/login", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:POST-/documents/upload", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:POST-/documents/ask", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:GET-/documents/history", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:GET-/documents", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/main.py", "target": "endpoint:backend/main.py:DELETE-/documents/<int:document_id>", "type": "contains", "direction": "forward", "weight": 1.0},
+
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:User", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:Document", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:ChatHistory", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:User", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:Document", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:backend/models.py", "target": "class:backend/models.py:ChatHistory", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:db_session", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:test_register_user_creates_user", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:test_register_user_rejects_duplicate_email", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:test_login_user_returns_token", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:test_login_user_rejects_invalid_password", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_auth.py", "target": "function:tests/test_auth.py:test_verify_token_accepts_bearer_token", "type": "contains", "direction": "forward", "weight": 1.0},
+
+    {"source": "file:tests/test_main.py", "target": "function:tests/test_main.py:test_login_route_delegates_to_login_user", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:tests/test_main.py", "target": "function:tests/test_main.py:test_history_route_returns_user_chat_history", "type": "contains", "direction": "forward", "weight": 1.0},
+
+    {"source": "file:backend/create_tables.py", "target": "function:backend/database.py:init_db", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:backend/auth.py:register_user", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:backend/auth.py:login_user", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:backend/auth.py:register_user", "target": "class:backend/models.py:User", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:backend/auth.py:login_user", "target": "class:backend/models.py:User", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "endpoint:backend/main.py:POST-/auth/register", "target": "function:backend/auth.py:register_user", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/auth/login", "target": "function:backend/auth.py:login_user", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/upload", "target": "function:backend/auth.py:verify_token", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/upload", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/upload", "target": "function:backend/rag.py:load_and_chunk", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/upload", "target": "function:backend/rag.py:embed_and_store", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/ask", "target": "function:backend/auth.py:verify_token", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/ask", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:POST-/documents/ask", "target": "function:backend/rag.py:answer_question", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:GET-/documents/history", "target": "function:backend/auth.py:verify_token", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:GET-/documents/history", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:GET-/documents", "target": "function:backend/auth.py:verify_token", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:GET-/documents", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:DELETE-/documents/<int:document_id>", "target": "function:backend/auth.py:verify_token", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "endpoint:backend/main.py:DELETE-/documents/<int:document_id>", "target": "function:backend/database.py:get_db_context", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "function:backend/database.py:init_db", "target": "class:backend/models.py:User", "type": "depends_on", "direction": "forward", "weight": 0.6},
+
+    {"source": "file:backend/auth.py", "target": "file:tests/test_auth.py", "type": "tested_by", "direction": "forward", "weight": 0.5},
+    {"source": "file:backend/main.py", "target": "file:tests/test_main.py", "type": "tested_by", "direction": "forward", "weight": 0.5}
+  ]
+}
