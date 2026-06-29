@@ -33,14 +33,45 @@ def load_and_chunk(file_path):
 
     return chunks 
 
+import traceback
+
 def embed_and_store(chunks, document_id):
-    embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-    vector_store = Chroma(
-        client=chroma_client,
-        collection_name=f"doc_{document_id}",
-        embedding_function=embeddings
-    )
-    vector_store.add_documents(chunks)
+    # 1. SANITIZE THE COLLECTION NAME
+    # Forces lowercase and removes anything that isn't a letter, number, or hyphen
+    safe_id = "".join([c for c in str(document_id) if c.isalnum() or c in "-_"]).lower()
+    collection_name = f"doc_{safe_id}"
+    
+    print(f"\n--- STARTING EMBEDDING FOR: {collection_name} ---")
+
+    try:
+        print("DEBUG 1: Initializing OpenAI Embeddings...")
+        embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
+    except Exception as e:
+        print("\n=== CRASH AT OPENAI INIT ===")
+        traceback.print_exc()
+        raise e
+
+    try:
+        print(f"DEBUG 2: Initializing Chroma VectorStore...")
+        vector_store = Chroma(
+            client=chroma_client, # Assuming this is defined globally above this function
+            collection_name=collection_name,
+            embedding_function=embeddings
+        )
+    except Exception as e:
+        print("\n=== CRASH AT CHROMA INIT ===")
+        traceback.print_exc()
+        raise e
+
+    try:
+        print(f"DEBUG 3: Adding {len(chunks)} chunks to Chroma...")
+        vector_store.add_documents(chunks)
+        print("DEBUG 4: Successfully added documents!")
+    except Exception as e:
+        print("\n=== CRASH AT ADD_DOCUMENTS ===")
+        traceback.print_exc()
+        raise e
+
     return vector_store
 
 def get_vector_store(document_id):
