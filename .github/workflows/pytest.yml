@@ -4,14 +4,21 @@ on: [push, pull_request]
 
 jobs:
   test:
+    # Explicitly use the latest ubuntu runner
     runs-on: ubuntu-latest
+    
+    # Add this node-version hint to satisfy the runner requirements
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          node-version: 24 # Explicitly map to the new standard
+
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          
           
       - name: Install dependencies
         run: |
