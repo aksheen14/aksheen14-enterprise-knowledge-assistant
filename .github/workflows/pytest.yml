@@ -4,21 +4,15 @@ on: [push, pull_request]
 
 jobs:
   test:
-    # Explicitly use the latest ubuntu runner
     runs-on: ubuntu-latest
-    
-    # Add this node-version hint to satisfy the runner requirements
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
-        with:
-          node-version: 24 # Explicitly map to the new standard
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-          
           
       - name: Install dependencies
         run: |
@@ -27,9 +21,9 @@ jobs:
           
       - name: Run Tests
         env:
-          # We inject the OpenAI Key from GitHub Secrets
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # Path for Chroma to use during the test
           CHROMA_PATH: ./test_chroma_db
         run: |
+          # Create the test env file so your code can find it
+          echo "CHROMA_PATH=./test_chroma_db" > backend/.env.test
           pytest tests/test_rag_pipeline.py -v
