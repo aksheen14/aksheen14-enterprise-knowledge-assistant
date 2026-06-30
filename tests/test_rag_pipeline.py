@@ -15,21 +15,12 @@ def test_full_document_upload_integration(client):
     assert os.path.exists(pdf_path), "Please place a dummy.pdf file inside the tests/ folder!"
 
     # 2. AUTHENTICATION BYPASS
-    print("\n🔐 Registering dummy test user...")
     auth_credentials = {"email": "test@example.com", "password": "password123"} 
     
     register_response=client.post('/auth/register', json=auth_credentials)
-    # --- ADD THIS DEBUG PRINT ---
-    print(f"[DEBUG] Register Status: {register_response.status_code}")
-    print(f"[DEBUG] Register Output: {register_response.data}")
-    # ----------------------------
-
-    login_response = client.post('/auth/login', json=auth_credentials)
-    # --- ADD THIS DEBUG PRINT ---
-    print(f"[DEBUG] Login Status: {login_response.status_code}")
-    print(f"[DEBUG] Login JSON: {login_response.get_json()}")
-    # ----------------------------
     
+    login_response = client.post('/auth/login', json=auth_credentials)
+
     jwt_token = login_response.get_json().get("token") 
     assert jwt_token is not None, "Login failed: No JWT token returned!"
     
@@ -38,8 +29,6 @@ def test_full_document_upload_integration(client):
     }
 
     # 3. TRIGGER THE API ROUTE WITH THE REAL FILE
-    print("🚀 Sending mock file upload request with JWT to Flask backend...")
-    
     # We must open the file in binary read mode ('rb') right when we send it
     with open(pdf_path, 'rb') as f:
         data = {
@@ -67,7 +56,6 @@ def test_full_document_upload_integration(client):
     test_client = chromadb.PersistentClient(path=test_db_path)
     collections = [col.name for col in test_client.list_collections()]
     
-    print(f"✅ Integration Test Passed! Found test collections: {collections}")
     assert len(collections) > 0, "No vector collections were written into the test database!"
 
 def test_ask_question_retrieval_and_generation(client):
@@ -91,21 +79,13 @@ def test_ask_question_retrieval_and_generation(client):
 
     # Grab the ID of the first document returned
     valid_doc_id = str(docs[-1]['id'])
-    print(f"✅ Found document ID: {valid_doc_id}")
-
-    # 3. ACT: Query the /documents/ask route
+    
     query_data = {
         "question": "What is the document about?",
         "document_id": valid_doc_id
     }
     
-    # --- ADD THIS DEBUG PRINT ---
-    for key, value in query_data.items():
-        print(f"[DEBUG] Key: {key}, Type: {type(value)}, Value: {value}")
-    # ----------------------------
-
     # 2. ACT: Hit the ask/query route
-    print("\n💬 Querying the document through the /documents/ask route...")
     response = client.post(
         '/documents/ask', 
         json=query_data, 
