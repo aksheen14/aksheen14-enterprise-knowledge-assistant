@@ -23,6 +23,3 @@ data/uploads/
 # VS Code
 .vscode/
 chroma_store/
-
-.claude
-.understand_anything
