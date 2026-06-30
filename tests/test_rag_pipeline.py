@@ -27,7 +27,7 @@ def test_full_document_upload_integration(client):
     login_response = client.post('/auth/login', json=auth_credentials)
     # --- ADD THIS DEBUG PRINT ---
     print(f"[DEBUG] Login Status: {login_response.status_code}")
-    print(f"[DEBUG] Login Output: {login_response.data}")
+    print(f"[DEBUG] Login JSON: {login_response.get_json()}")
     # ----------------------------
     
     jwt_token = login_response.get_json().get("token") 
