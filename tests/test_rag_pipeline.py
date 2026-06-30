@@ -90,7 +90,7 @@ def test_ask_question_retrieval_and_generation(client):
     assert len(docs) > 0, "No documents found in the database!"
 
     # Grab the ID of the first document returned
-    valid_doc_id = docs[-1]['id']
+    valid_doc_id = str(docs[-1]['id'])
     print(f"✅ Found document ID: {valid_doc_id}")
 
     # 3. ACT: Query the /documents/ask route
@@ -104,7 +104,6 @@ def test_ask_question_retrieval_and_generation(client):
         print(f"[DEBUG] Key: {key}, Type: {type(value)}, Value: {value}")
     # ----------------------------
 
-    response = client.post('/documents/ask', json=query_data, headers=headers)
     # 2. ACT: Hit the ask/query route
     print("\n💬 Querying the document through the /documents/ask route...")
     response = client.post(
