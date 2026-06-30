@@ -25,12 +25,12 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CHROMA_PATH: ./test_chroma_db
         run: |
-          # Create the environment file with the single arrow (overwrites)
+          # Initialize the file
           echo "CHROMA_PATH=./test_chroma_db" > backend/.env.test
-          
-          # Add the database URL with double arrows (appends)
           echo "DATABASE_URL=sqlite:///./test_app.db" >> backend/.env.test
           
+          # Inject both possible secret key names to guarantee a match
           echo "JWT_SECRET_KEY=f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a" >> backend/.env.test
-
+          echo "SECRET_KEY=f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a" >> backend/.env.test
+          
           pytest tests/test_rag_pipeline.py -v
