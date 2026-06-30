@@ -5,7 +5,7 @@ import os
 from dotenv import load_dotenv
 from database import get_db_context
 from models import User
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 
 
@@ -41,10 +41,9 @@ def login_user(email, password):
 
             if not correct_password:
                 return jsonify({"error": "invalid credentials"}), 401
-
             payload = {
                 "user_id": existing_user.id,
-                "exp": datetime.utcnow() + timedelta(hours=1)
+                "exp": datetime.now(timezone.utc) + timedelta(hours=1)
             }
 
             secret_key = os.getenv("JWT_SECRET")

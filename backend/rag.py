@@ -16,12 +16,18 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set - check your .env file")
 
-# path where chroma will store its data on disk
-CHROMA_HOST = os.getenv("CHROMA_SERVER_HOST", "chroma.railway.internal")
-CHROMA_PORT = int(os.getenv("CHROMA_SERVER_PORT", 8000))
+chroma_path = os.getenv("CHROMA_PATH")
 
-# This connects to the separate Chroma service instead of a local folder
-chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
+if chroma_path:
+    # TEST MODE: Save to the local folder defined in .env.test
+    print(f"🔧 RUNNING IN TEST MODE: Using local ChromaDB at {chroma_path}")
+    chroma_client = chromadb.PersistentClient(path=chroma_path)
+else:
+    CHROMA_HOST = os.getenv("CHROMA_SERVER_HOST", "chroma.railway.internal")
+    CHROMA_PORT = int(os.getenv("CHROMA_SERVER_PORT", 8000))
+
+    # This connects to the separate Chroma service instead of a local folder
+    chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
 
 collection = chroma_client.get_or_create_collection(name="your_collection_name")
 def load_and_chunk(file_path):
