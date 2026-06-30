@@ -31,4 +31,6 @@ jobs:
           # Add the database URL with double arrows (appends)
           echo "DATABASE_URL=sqlite:///./test_app.db" >> backend/.env.test
           
+          echo "JWT_SECRET_KEY=f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a" >> backend/.env.test
+
           pytest tests/test_rag_pipeline.py -v
