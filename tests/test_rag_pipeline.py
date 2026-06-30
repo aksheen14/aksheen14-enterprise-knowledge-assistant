@@ -18,8 +18,17 @@ def test_full_document_upload_integration(client):
     print("\n🔐 Registering dummy test user...")
     auth_credentials = {"email": "test@example.com", "password": "password123"} 
     
-    client.post('/auth/register', json=auth_credentials)
+    register_response=client.post('/auth/register', json=auth_credentials)
+    # --- ADD THIS DEBUG PRINT ---
+    print(f"[DEBUG] Register Status: {register_response.status_code}")
+    print(f"[DEBUG] Register Output: {register_response.data}")
+    # ----------------------------
+
     login_response = client.post('/auth/login', json=auth_credentials)
+    # --- ADD THIS DEBUG PRINT ---
+    print(f"[DEBUG] Login Status: {login_response.status_code}")
+    print(f"[DEBUG] Login Output: {login_response.data}")
+    # ----------------------------
     
     jwt_token = login_response.get_json().get("token") 
     assert jwt_token is not None, "Login failed: No JWT token returned!"
