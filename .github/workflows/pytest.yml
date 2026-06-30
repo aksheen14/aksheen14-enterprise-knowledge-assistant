@@ -25,6 +25,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CHROMA_PATH: ./test_chroma_db
         run: |
-          # Create the test env file so your code can find it
+          # Create the environment file with the single arrow (overwrites)
           echo "CHROMA_PATH=./test_chroma_db" > backend/.env.test
+          
+          # Add the database URL with double arrows (appends)
+          echo "DATABASE_URL=sqlite:///./test_app.db" >> backend/.env.test
+          
           pytest tests/test_rag_pipeline.py -v
