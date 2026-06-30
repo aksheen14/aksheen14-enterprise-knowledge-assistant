@@ -61,7 +61,7 @@ def get_vector_store(document_id):
     )
     return vector_store
 
-def answer_question(question, document_id):
+def answer_question(question, document_id, chat_history):
     if chat_history is None:
         chat_history = []
 
@@ -72,11 +72,12 @@ def answer_question(question, document_id):
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Answer the question based on the context below.\n\nContext: {context}"),
-        MessagesPlaceholder(vraibale_name="chat_history")
+        # Added a comma at the end of the line below to fix the syntax error
+        MessagesPlaceholder(variable_name="chat_history"), 
         ("human", "{input}"),
     ])
 
-    # LCEL chain — pipes data through each step
+    # LCEL chain
     chain = (
         {"context": itemgetter("input") | retriever, 
          "input": itemgetter("input"),

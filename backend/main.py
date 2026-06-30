@@ -7,6 +7,7 @@ from rag import load_and_chunk, embed_and_store, answer_question
 import os
 import json
 from flask_cors import CORS
+from langchain_core.messages import HumanMessage, AIMessage
 
 # create the flask app
 app = Flask(__name__)
@@ -143,16 +144,34 @@ def ask_question():
                     Document.user_id == user_id,
                 ).first()
         except Exception as e:
-            return jsonify({"error": f"database error: {str(e)}"}), 500
+            return jsonify({"error": f"database error: {str(e)}"}), 505
 
         if not document:
             return jsonify({"error": "document not found"}), 404
+        
+        #fetch history
+        try:
+            with get_db_context() as db:
+                chat_history = db.query(ChatHistory).filter(
+                    ChatHistory.document_id == document_id,
+                    ChatHistory.user_id == user_id
+                ).order_by(ChatHistory.asked_at.desc()).limit(5).all()
+        except Exception as e:
+            return jsonify({"error": f"database error: {str(e)}"}), 506
+        
+        chat_history.reverse()
+
+        #format for langchain
+        formatted_history = []
+        for chat in chat_history:
+            formatted_history.append(HumanMessage(content=chat.question))
+            formatted_history.append(AIMessage(content=chat.answer))
 
         # process question
         try:
-            answer, source_chunks = answer_question(question, document_id)
+            answer, source_chunks = answer_question(question, document_id, chat_history=formatted_history)
         except Exception as e:
-            return jsonify({"error": f"failed to answer question: {str(e)}"}), 500
+            return jsonify({"error": f"failed to answer question: {str(e)}"}), 501
 
         if not answer or not source_chunks:
             return jsonify({"error": "couldn't answer question"}), 400
@@ -179,12 +198,12 @@ def ask_question():
                 db.add(new_chat)
                 db.commit()
         except Exception as e:
-            return jsonify({"error": f"failed to save chat history: {str(e)}"}), 500
+            return jsonify({"error": f"failed to save chat history: {str(e)}"}), 502
 
         return jsonify({"answer": answer, "sources": sources}), 200
 
     except Exception as e:
-        return jsonify({"error": f"server error: {str(e)}"}), 500
+        return jsonify({"error": f"server error: {str(e)}"}), 503
 
 @app.route("/documents/history", methods=["GET"]) 
 def history():

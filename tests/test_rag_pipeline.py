@@ -81,7 +81,11 @@ def test_ask_question_retrieval_and_generation(client):
     valid_doc_id = str(docs[-1]['id'])
     
     query_data = {
+        "question": "My name is Bob?",
+        "document_id": valid_doc_id,
         "question": "What is the document about?",
+        "document_id": valid_doc_id,
+        "question": "What is my name?",
         "document_id": valid_doc_id
     }
     
