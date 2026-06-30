@@ -26,8 +26,8 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CHROMA_PATH: ./test_chroma_db
           DATABASE_URL: sqlite:///./test_app.db
-          JWT_SECRET_KEY: super-secret-test-key-123
-          SECRET_KEY: super-secret-test-key-123
+          JWT_SECRET_KEY: f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a
+          SECRET_KEY: f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a
         run: |
           # No more echo commands needed! 
           pytest tests/test_rag_pipeline.py -v
