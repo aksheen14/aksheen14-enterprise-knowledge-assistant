@@ -4,10 +4,11 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 import chromadb
 from langchain_chroma import Chroma
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 import os
+from operator import itemgetter
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -61,6 +62,9 @@ def get_vector_store(document_id):
     return vector_store
 
 def answer_question(question, document_id):
+    if chat_history is None:
+        chat_history = []
+
     vector_store = get_vector_store(document_id)
     retriever = vector_store.as_retriever(search_kwargs={"k": 4})
 
@@ -68,18 +72,25 @@ def answer_question(question, document_id):
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Answer the question based on the context below.\n\nContext: {context}"),
+        MessagesPlaceholder(vraibale_name="chat_history")
         ("human", "{input}"),
     ])
 
     # LCEL chain — pipes data through each step
     chain = (
-        {"context": retriever, "input": RunnablePassthrough()}
+        {"context": itemgetter("input") | retriever, 
+         "input": itemgetter("input"),
+         "chat_history": itemgetter("chat_history")
+        }
         | prompt
         | llm
         | StrOutputParser()
     )
 
-    answer = chain.invoke(question)
+    answer = chain.invoke({
+        "input" : question,
+        "chat_history": chat_history
+    })
 
     # get source documents separately
     source_chunks = retriever.invoke(question)

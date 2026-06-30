@@ -26,7 +26,6 @@ jobs:
           CHROMA_PATH: ./test_chroma_db
           DATABASE_URL: sqlite:///./test_app.db
           JWT_SECRET: f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a
-          #FLASK_SECRET_KEY: f75bce74ad732d64c6bb90067d5c6c10b2243a327e37f60eb3370e265058d23a
           FLASK_ENV: testing
           FLASK_APP: backend/main.py
         run: |
