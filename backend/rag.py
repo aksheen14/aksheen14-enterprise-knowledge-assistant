@@ -68,22 +68,7 @@ def answer_question(question, document_id, chat_history):
     if chat_history is None:
         chat_history = []
 
-    vector_store = get_vector_store(document_id)
-    vector_retriever = vector_store.as_retriever(search_kwargs={"k": 4})
-
-    raw_data = vector_store.get()
-    docs = [
-        Document(page_content=text, metadata=meta)
-        for text, meta in zip(raw_data['documents'], raw_data['metadatas'])
-    ]
-
-    keyword_retriever = BM25Retriever.from_documents(docs)
-    keyword_retriever.k = 4
-    
-    ensemble_retriever = EnsembleRetriever(
-        retrievers=[vector_retriever, keyword_retriever], 
-        weights=[0.5, 0.5]
-    )
+    ensemble_retriever = get_hybrid_retriever(document_id=document_id)
 
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
@@ -114,3 +99,24 @@ def answer_question(question, document_id, chat_history):
     source_chunks = ensemble_retriever.invoke(question)
 
     return answer, source_chunks
+
+def get_hybrid_retriever(document_id, k=4):
+    vector_store = get_vector_store(document_id)
+    
+    # Vector Retriever
+    vector_retriever = vector_store.as_retriever(search_kwargs={"k": k})
+    
+    # BM25 Retriever
+    raw_data = vector_store.get()
+    docs = [
+        Document(page_content=text, metadata=meta) 
+        for text, meta in zip(raw_data['documents'], raw_data['metadatas'])
+    ]
+    keyword_retriever = BM25Retriever.from_documents(docs)
+    keyword_retriever.k = k
+    
+    # Ensemble
+    return EnsembleRetriever(
+        retrievers=[vector_retriever, keyword_retriever], 
+        weights=[0.5, 0.5]
+    )

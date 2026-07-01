@@ -83,10 +83,6 @@ def test_ask_question_retrieval_and_generation(client):
     query_data = {
         "question": "My name is Bob?",
         "document_id": valid_doc_id,
-        "question": "What is the document about?",
-        "document_id": valid_doc_id,
-        "question": "What is my name?",
-        "document_id": valid_doc_id
     }
     
     # 2. ACT: Hit the ask/query route
