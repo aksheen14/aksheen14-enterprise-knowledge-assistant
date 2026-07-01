@@ -9,6 +9,9 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 import os
 from operator import itemgetter
+from langchain_community.retrievers.bm25 import BM25Retriever
+from langchain_classic.retrievers import EnsembleRetriever
+from langchain_core.documents import Document
 
 load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -66,7 +69,21 @@ def answer_question(question, document_id, chat_history):
         chat_history = []
 
     vector_store = get_vector_store(document_id)
-    retriever = vector_store.as_retriever(search_kwargs={"k": 4})
+    vector_retriever = vector_store.as_retriever(search_kwargs={"k": 4})
+
+    raw_data = vector_store.get()
+    docs = [
+        Document(page_content=text, metadata=meta)
+        for text, meta in zip(raw_data['documents'], raw_data['metadatas'])
+    ]
+
+    keyword_retriever = BM25Retriever.from_documents(docs)
+    keyword_retriever.k = 4
+    
+    ensemble_retriever = EnsembleRetriever(
+        retrievers=[vector_retriever, keyword_retriever], 
+        weights=[0.5, 0.5]
+    )
 
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
@@ -79,7 +96,7 @@ def answer_question(question, document_id, chat_history):
 
     # LCEL chain
     chain = (
-        {"context": itemgetter("input") | retriever, 
+        {"context": itemgetter("input") | ensemble_retriever, 
          "input": itemgetter("input"),
          "chat_history": itemgetter("chat_history")
         }
@@ -94,6 +111,6 @@ def answer_question(question, document_id, chat_history):
     })
 
     # get source documents separately
-    source_chunks = retriever.invoke(question)
+    source_chunks = ensemble_retriever.invoke(question)
 
     return answer, source_chunks
