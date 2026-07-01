@@ -3,6 +3,7 @@ import sys
 import pytest
 from dotenv import load_dotenv
 
+
 # 1. PATH RESOLUTION
 # This ensures Pytest can find your backend folder, even though tests/ is outside of it.
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

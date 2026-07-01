@@ -60,19 +60,71 @@ export default function Chat() {
 
         // add user question to chat immediately
         const userMessage = { role: "user", text: question };
-        setMessages((prev) => [...prev, userMessage]);
+
+        const aiPlaceholder = { role: "ai", text: question, sources: []};
+
+        setMessages((prev) => [...prev, userMessage, aiPlaceholder]);
         setQuestion("");
 
         try {
-            const res = await askQuestion(question, documentId);
-            const aiMessage = {
-                role: "ai",
-                text: res.data.answer,
-                sources: res.data.sources,
-            };
-            setMessages((prev) => [...prev, aiMessage]);
-        } catch (err) {
-            setError(err.response?.data?.error || "Something went wrong");
+            const response = await fetch('/documents/ask', 
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Assuming you store your token in localStorage. Update if you use cookies/context!
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` 
+                },
+                body: JSON.stringify({ 
+                    question: currentQuestion, 
+                    document_id: documentId 
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder("utf-8");
+            let isDone = false;
+
+            while(!isDone) {
+                const { value, done } = await reader.read();
+                if (done) break;
+
+                const chunkString = decoder.decode(value, { stream: true });
+                const messages = chunkString.split('\n\n');
+
+                for (const message of messages) {
+                    if (message.trim() !== "") {
+                        try {
+                            const parsedData = JSON.parse(message);
+
+                            if (parsedData.type === "sources") {
+                                // Update the last message (the AI placeholder) with the sources
+                                setMessages((prev) => {
+                                    const updated = [...prev];
+                                    updated[updated.length - 1].sources = parsedData.data;
+                                    return updated;
+                                });
+                            } else if (parsedData.type === "chunk") {
+                                // Append the new text token to the AI placeholder
+                                setMessages((prev) => {
+                                    const updated = [...prev];
+                                    updated[updated.length - 1].text += parsedData.data;
+                                    return updated;
+                                });
+                            }
+                        } catch(e) {
+                            console.error("Failed to parse stream chunk:", e);
+                        }
+                    }
+                }
+            }
+        }
+        catch (err) {
+            setError(err.message || "Something went wrong during the stream");
         } finally {
             setLoading(false);
         }

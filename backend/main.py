@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response, stream_with_context, current_app
 from werkzeug.utils import secure_filename
 from database import init_db, get_db_context
 from models import User, Document, ChatHistory
@@ -144,7 +144,7 @@ def ask_question():
                     Document.user_id == user_id,
                 ).first()
         except Exception as e:
-            return jsonify({"error": f"database error: {str(e)}"}), 505
+            return jsonify({"error": f"database error: {str(e)}"}), 500
 
         if not document:
             return jsonify({"error": "document not found"}), 404
@@ -157,7 +157,7 @@ def ask_question():
                     ChatHistory.user_id == user_id
                 ).order_by(ChatHistory.asked_at.desc()).limit(5).all()
         except Exception as e:
-            return jsonify({"error": f"database error: {str(e)}"}), 506
+            return jsonify({"error": f"database error: {str(e)}"}), 500
         
         chat_history.reverse()
 
@@ -171,10 +171,10 @@ def ask_question():
         try:
             answer, source_chunks = answer_question(question, document_id, chat_history=formatted_history)
         except Exception as e:
-            return jsonify({"error": f"failed to answer question: {str(e)}"}), 501
+            return jsonify({"error": f"failed to answer question: {str(e)}"}), 500
 
         if not answer or not source_chunks:
-            return jsonify({"error": "couldn't answer question"}), 400
+            return jsonify({"error": f"couldn't answer question: {str(e)}"}), 400
 
         sources = []
         for doc in source_chunks:
@@ -185,25 +185,43 @@ def ask_question():
 
         sources_str = json.dumps(sources)
 
-        new_chat = ChatHistory(
-            question=question,
-            answer=answer,
-            sources=sources_str,
-            document_id=document_id,
-            user_id=user_id,
+        app = current_app._get_current_object()
+
+        def generate():
+            full_ai_answer = ""
+            yield json.dumps({"type": "sources", "data": sources}) + "\n\n"
+
+            for chunk in answer:
+                full_ai_answer += chunk
+                yield json.dumps({"type": "chunk", "data": chunk}) + "\n\n"
+
+            new_chat = ChatHistory(
+                question=question,
+                answer=full_ai_answer,
+                sources=sources_str,
+                document_id=document_id,
+                user_id=user_id,
+            )
+            with app.app_context():
+                try:
+                    # Use your existing DB logic here
+                    with get_db_context() as db:
+                        db.add(new_chat)
+                        db.commit()
+                except Exception as e:
+                    print(f"Database save failed inside stream: {e}")
+                return Response(
+                    stream_with_context(generate()),
+                    mimetype="text/event-stream"
+                )
+
+        return Response(
+            stream_with_context(generate()), 
+            mimetype="text/event-stream"
         )
 
-        try:
-            with get_db_context() as db:
-                db.add(new_chat)
-                db.commit()
-        except Exception as e:
-            return jsonify({"error": f"failed to save chat history: {str(e)}"}), 502
-
-        return jsonify({"answer": answer, "sources": sources}), 200
-
     except Exception as e:
-        return jsonify({"error": f"server error: {str(e)}"}), 503
+        return jsonify({"error": f"server error: {str(e)}"}), 500
 
 @app.route("/documents/history", methods=["GET"]) 
 def history():

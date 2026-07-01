@@ -93,10 +93,16 @@ def test_ask_question_retrieval_and_generation(client):
     )
 
     # 3. ASSERT: Validate the response
-    assert response.status_code == 200, f"Ask route failed with {response.status_code}"
     
-    response_json = response.get_json()
-    assert "answer" in response_json, "Response missing 'answer' key"
-    assert "sources" in response_json, "Response missing 'sources' key"
-    
-    print(f"✅ AI Answered: {response_json['answer'][:50]}...")
+    assert response.status_code == 200, f"Ask route failed with 500. Error details: {response.get_data(as_text=True)}"
+
+    # 1. Verify it succeeded and is using the correct streaming mimetype
+    assert response.status_code == 200, f"Route failed: {response.get_data(as_text=True)}"
+    assert response.mimetype == 'text/event-stream', "Endpoint is not streaming!"
+
+    # 2. Read the raw text stream instead of expecting JSON
+    streamed_data = response.get_data(as_text=True)
+
+    # 3. Verify our specific chunk structures were yielded
+    assert '{"type": "sources"' in streamed_data, "Stream did not return sources"
+    assert '{"type": "chunk"' in streamed_data, "Stream did not return AI chunks"

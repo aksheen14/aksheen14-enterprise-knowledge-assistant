@@ -64,42 +64,45 @@ def get_vector_store(document_id):
     )
     return vector_store
 
-def answer_question(question, document_id, chat_history):
+def answer_question(question, document_id, chat_history=None):
     if chat_history is None:
         chat_history = []
 
-    ensemble_retriever = get_hybrid_retriever(document_id=document_id)
+    # 1. Setup Retriever & Fetch Sources immediately
+    ensemble_retriever = get_hybrid_retriever(document_id)
+    source_chunks = ensemble_retriever.invoke(question)
 
+    # 2. Setup LLM & Prompt
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", "Answer the question based on the context below.\n\nContext: {context}"),
-        # Added a comma at the end of the line below to fix the syntax error
         MessagesPlaceholder(variable_name="chat_history"), 
         ("human", "{input}"),
     ])
 
-    # LCEL chain
+    # 3. Build LCEL Chain
     chain = (
-        {"context": itemgetter("input") | ensemble_retriever, 
-         "input": itemgetter("input"),
-         "chat_history": itemgetter("chat_history")
+        {
+            "context": lambda x: source_chunks, 
+            "input": itemgetter("input"),
+            "chat_history": itemgetter("chat_history")
         }
         | prompt
         | llm
         | StrOutputParser()
     )
 
-    answer = chain.invoke({
+    # 4. STREAM INSTEAD OF INVOKE
+    # This now returns a generator that yields text chunks, rather than a single string
+    answer_generator = chain.stream({
         "input" : question,
         "chat_history": chat_history
     })
 
-    # get source documents separately
-    source_chunks = ensemble_retriever.invoke(question)
-
-    return answer, source_chunks
-
+    # Return both the generator and the source chunks so the route can handle them
+    return answer_generator, source_chunks
+    
 def get_hybrid_retriever(document_id, k=4):
     vector_store = get_vector_store(document_id)
     
