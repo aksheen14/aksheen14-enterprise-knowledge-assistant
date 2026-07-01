@@ -34,3 +34,4 @@ data/uploads/
 # IDEs and Tools
 .vscode/
 chroma_store/
+*.db

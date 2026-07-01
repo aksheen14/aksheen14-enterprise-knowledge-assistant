@@ -2,13 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY backend/requirements.txt ./requirements.txt
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY backend/ ./backend/
+COPY . . 
 
 ENV PYTHONPATH=/app
 
 EXPOSE 5000
 
-CMD ["python", "backend/main.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
