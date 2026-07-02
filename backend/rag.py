@@ -27,7 +27,7 @@ if chroma_path:
     print(f"🔧 RUNNING IN TEST MODE: Using local ChromaDB at {chroma_path}")
     chroma_client = chromadb.PersistentClient(path=chroma_path)
 else:
-    CHROMA_HOST = os.getenv("CHROMA_SERVER_HOST", "chroma.railway.internal")
+    CHROMA_HOST = os.getenv("CHROMA_SERVER_HOST", "localhost")
     CHROMA_PORT = int(os.getenv("CHROMA_SERVER_PORT", 8000))
 
     # This connects to the separate Chroma service instead of a local folder

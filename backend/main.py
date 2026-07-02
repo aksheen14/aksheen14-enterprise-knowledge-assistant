@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, Response, stream_with_context, current_app
 from werkzeug.utils import secure_filename
-from database import init_db, get_db_context
+from backend.database import init_db, get_db_context 
 from models import User, Document, ChatHistory
 from auth import register_user, login_user, verify_token
 from rag import load_and_chunk, embed_and_store, answer_question
@@ -174,7 +174,7 @@ def ask_question():
             return jsonify({"error": f"failed to answer question: {str(e)}"}), 500
 
         if not answer or not source_chunks:
-            return jsonify({"error": f"couldn't answer question: {str(e)}"}), 400
+            return jsonify({"error": "couldn't answer question"}), 400
 
         sources = []
         for doc in source_chunks:
@@ -210,10 +210,6 @@ def ask_question():
                         db.commit()
                 except Exception as e:
                     print(f"Database save failed inside stream: {e}")
-                return Response(
-                    stream_with_context(generate()),
-                    mimetype="text/event-stream"
-                )
 
         return Response(
             stream_with_context(generate()), 
