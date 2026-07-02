@@ -113,9 +113,11 @@ def upload_documents():
 @app.route("/documents/ask", methods=["POST"]) 
 def ask_question():
     try:
+        print("[ASK] 1. Entered ask_question route")
         # validate user
         token = request.headers.get("Authorization")
         user_id = verify_token(token)
+        print(f"[ASK] 2. User verified: {user_id}")
         if not user_id:
             return jsonify({"error": "invalid credentials"}), 401
 
@@ -137,30 +139,40 @@ def ask_question():
         except (TypeError, ValueError):
             return jsonify({"error": "invalid document_id"}), 400
 
+        print(f"[ASK] 3. Parameters parsed - Question: {question}, Doc ID: {document_id}")
+
         # verify document ownership
         try:
+            print("[ASK] 4. Querying document metadata")
             with get_db_context() as db:
                 document = db.query(Document).filter(
                     Document.id == document_id,
                     Document.user_id == user_id,
                 ).first()
         except Exception as e:
+            print(f"[ASK] Doc Query DB Error: {e}")
             return jsonify({"error": f"database error: {str(e)}"}), 501
 
         if not document:
+            print("[ASK] Document not found in DB")
             return jsonify({"error": "document not found"}), 404
         
+        print("[ASK] 5. Document verification passed")
+
         #fetch history
         try:
+            print("[ASK] 6. Querying chat history")
             with get_db_context() as db:
                 chat_history = db.query(ChatHistory).filter(
                     ChatHistory.document_id == document_id,
                     ChatHistory.user_id == user_id
                 ).order_by(ChatHistory.asked_at.desc()).limit(5).all()
         except Exception as e:
+            print(f"[ASK] History Query DB Error: {e}")
             return jsonify({"error": f"database error: {str(e)}"}), 502
         
         chat_history.reverse()
+        print(f"[ASK] 7. Found {len(chat_history)} history records")
 
         #format for langchain
         formatted_history = []
@@ -170,8 +182,11 @@ def ask_question():
 
         # process question
         try:
+            print("[ASK] 8. Calling answer_question RAG pipeline")
             answer, source_chunks = answer_question(question, document_id, chat_history=formatted_history)
+            print("[ASK] 9. RAG pipeline completed successfully")
         except Exception as e:
+            print(f"[ASK] RAG Pipeline Error: {e}")
             return jsonify({"error": f"failed to answer question: {str(e)}"}), 503
 
         if not answer or not source_chunks:
