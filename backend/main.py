@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, Response, stream_with_context, current_app
 from werkzeug.utils import secure_filename
-from backend.database import init_db, get_db_context 
+from database import init_db, get_db_context 
 from models import User, Document, ChatHistory
 from auth import register_user, login_user, verify_token
 from rag import load_and_chunk, embed_and_store, answer_question
