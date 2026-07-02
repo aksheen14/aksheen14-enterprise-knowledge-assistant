@@ -177,9 +177,15 @@ def ask_question():
 
         #format for langchain
         formatted_history = []
-        for chat in chat_history:
-            formatted_history.append(HumanMessage(content=chat.question))
-            formatted_history.append(AIMessage(content=chat.answer))
+        try:
+            print("[ASK] 7.1 Formatting chat history for LangChain")
+            for chat in chat_history:
+                formatted_history.append(HumanMessage(content=chat.question or ""))
+                formatted_history.append(AIMessage(content=chat.answer or ""))
+            print("[ASK] 7.2 Finished formatting chat history")
+        except Exception as ex:
+            print(f"[ASK] LangChain Message Formatting Error: {ex}")
+            return jsonify({"error": f"failed to format chat history: {str(ex)}"}), 505
 
         # process question
         try:
