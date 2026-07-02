@@ -161,6 +161,7 @@ def ask_question():
         print("[ASK] 5. Document verification passed")
 
         #fetch history
+        formatted_history = []
         try:
             print("[ASK] 6. Querying chat history")
             with get_db_context() as db:
@@ -168,24 +169,19 @@ def ask_question():
                     ChatHistory.document_id == document_id,
                     ChatHistory.user_id == user_id
                 ).order_by(ChatHistory.asked_at.desc()).limit(5).all()
-        except Exception as e:
-            print(f"[ASK] History Query DB Error: {e}")
-            return jsonify({"error": f"database error: {str(e)}"}), 502
-        
-        chat_history.reverse()
-        print(f"[ASK] 7. Found {len(chat_history)} history records")
+                
+                chat_history.reverse()
+                print(f"[ASK] 7. Found {len(chat_history)} history records")
 
-        #format for langchain
-        formatted_history = []
-        try:
-            print("[ASK] 7.1 Formatting chat history for LangChain")
-            for chat in chat_history:
-                formatted_history.append(HumanMessage(content=chat.question or ""))
-                formatted_history.append(AIMessage(content=chat.answer or ""))
-            print("[ASK] 7.2 Finished formatting chat history")
-        except Exception as ex:
-            print(f"[ASK] LangChain Message Formatting Error: {ex}")
-            return jsonify({"error": f"failed to format chat history: {str(ex)}"}), 505
+                #format for langchain
+                print("[ASK] 7.1 Formatting chat history for LangChain")
+                for chat in chat_history:
+                    formatted_history.append(HumanMessage(content=chat.question or ""))
+                    formatted_history.append(AIMessage(content=chat.answer or ""))
+                print("[ASK] 7.2 Finished formatting chat history")
+        except Exception as e:
+            print(f"[ASK] History Query/Formatting DB Error: {e}")
+            return jsonify({"error": f"database/formatting error: {str(e)}"}), 502
 
         # process question
         try:
