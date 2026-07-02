@@ -11,7 +11,7 @@ from langchain_core.messages import HumanMessage, AIMessage
 
 # create the flask app
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 # folder where uploaded files will be saved
 UPLOAD_FOLDER = "data/uploads/"
