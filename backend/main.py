@@ -112,6 +112,7 @@ def upload_documents():
 
 @app.route("/documents/ask", methods=["POST"]) 
 def ask_question():
+    print("[ASK] 0. Just entered the route")
     try:
         print("[ASK] 1. Entered ask_question route")
         # validate user
