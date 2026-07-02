@@ -145,7 +145,7 @@ def ask_question():
                     Document.user_id == user_id,
                 ).first()
         except Exception as e:
-            return jsonify({"error": f"database error: {str(e)}"}), 500
+            return jsonify({"error": f"database error: {str(e)}"}), 501
 
         if not document:
             return jsonify({"error": "document not found"}), 404
@@ -158,7 +158,7 @@ def ask_question():
                     ChatHistory.user_id == user_id
                 ).order_by(ChatHistory.asked_at.desc()).limit(5).all()
         except Exception as e:
-            return jsonify({"error": f"database error: {str(e)}"}), 500
+            return jsonify({"error": f"database error: {str(e)}"}), 502
         
         chat_history.reverse()
 
@@ -172,7 +172,7 @@ def ask_question():
         try:
             answer, source_chunks = answer_question(question, document_id, chat_history=formatted_history)
         except Exception as e:
-            return jsonify({"error": f"failed to answer question: {str(e)}"}), 500
+            return jsonify({"error": f"failed to answer question: {str(e)}"}), 503
 
         if not answer or not source_chunks:
             return jsonify({"error": "couldn't answer question"}), 400
@@ -218,7 +218,7 @@ def ask_question():
         )
 
     except Exception as e:
-        return jsonify({"error": f"server error: {str(e)}"}), 500
+        return jsonify({"error": f"server error: {str(e)}"}), 504
 
 @app.route("/documents/history", methods=["GET"]) 
 def history():
