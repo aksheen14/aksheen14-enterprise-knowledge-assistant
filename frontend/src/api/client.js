@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-    baseURL: "https://aksheen14-enterprise-knowledge-assistant-production.up.railway.app",
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 // automatically attach token to every request if it exists
