@@ -33,7 +33,7 @@ else:
     # This connects to the separate Chroma service instead of a local folder
     chroma_client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
 
-collection = chroma_client.get_or_create_collection(name="your_collection_name")
+
 def load_and_chunk(file_path):
     loader = PyPDFLoader(file_path=file_path) #docloader
     pages = loader.load()
